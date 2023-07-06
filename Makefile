@@ -71,9 +71,9 @@ leaks: all
 
 # -- Removes objects -- #
 clean :
-	@printf "💥 $(RED)Removing $(NAME)'s objects...$(RESET)\t\t\t💥\n"
+	@printf "💥 $(RED)Removing $(NAME)'s objects...$(RESET)\t\t\t\t💥\n"
 	@$(RM) $(OBJS_DIR)
-	@printf "🗑️  $(CYAN)$(NAME)'s object successfully deleted.$(RESET)\t\t🗑️\n"
+	@printf "🗑️  $(CYAN)$(NAME)'s object successfully deleted.$(RESET)\t\t\t🗑️\n"
 
 # -- Removes objects (with clean) and executable -- #
 fclean : clean
