@@ -29,9 +29,56 @@
 **	• Again, philosophers should avoid dying!
 */
 
+bool ft_valid_arg(int ac, char **av)
+{
+	int philo_nb;
+	int	tt_d; //time_to_die
+	int	tt_e; //time_to_eat
+	int	tt_s; //time_to_sleep
+	int meal_nb; //number_of_times_each_philosopher_must_eat
+
+	(void)av;
+	if (ac < 5)
+		return(printf("❌"KRED" Not enough arguments ❌\n"KRT), false);
+	else if (ac > 6)
+		return(printf("❌"KRED" Too many arguments ❌\n"KRT), false);
+	else
+	{
+		printf("Welcome to my "KCYN"%s"KRT" program\n", av[0]);
+		philo_nb = ft_atoi(av[1]);
+		tt_d = ft_atoi(av[2]);
+		tt_e = ft_atoi(av[3]);
+		tt_s = ft_atoi(av[4]);
+		if (DEBUG)
+		{
+			printf(KITA KGRE"\n* --- DEBUG in ft_is_valid arg starts --- *\n");
+			printf("philo_nb = %d\n", philo_nb);
+			printf("tt_d = %d\n", tt_d);
+			printf("tt_e = %d\n", tt_e);
+			printf("tt_s = %d\n", tt_s);
+			if (ac < 6)
+				printf("* --- DEBUG in ft_is_valid arg ends --- *\n"KRT);
+		}
+		
+		if (ac == 6)
+		{
+			meal_nb = ft_atoi(av[5]);
+			if (DEBUG)
+			{
+				printf("meal_nb = %d\n", meal_nb);
+				printf("* --- DEBUG in ft_is_valid arg ends --- *\n"KRT);
+			}
+		}
+	}
+	return(true);
+}
+
+
 int main (int ac, char **av)
 { 	
 	(void)ac;
-	printf("Welcome to my "KCYN"%s"KRT" program\n", av[0]);
-	printf("🚧 "KYEL"Work In Progress 🚧\n"KRT);
+	if(!ft_valid_arg(ac, av))
+		return (1);	
+	printf("\n🚧 "KYEL"Work In Progress 🚧\n"KRT);
+	return(0);
 }

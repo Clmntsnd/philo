@@ -13,7 +13,8 @@ RM			=	rm -rf
 
 # -- SRC Files -- #
 SRCS_DIR	=	./srcs/
-SRCS_LST	= 	main.c
+SRCS_LST	= 	main.c \
+				lib.c
 
 SRCS		=	$(addprefix $(SRCS_DIR), $(SRCS_LST))
 

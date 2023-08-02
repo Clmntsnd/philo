@@ -4,11 +4,12 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <stdbool.h>
 # include <string.h>
 # include <sys/time.h>
 # include <pthread.h>
 
-/* --------------------COLORS--------------------- */
+/* ------------------ COLORS ------------------- */
 # define KNRM "\x1B[m"
 # define BLD "\x1B[1m"
 # define KGRE "\x1B[2m"
@@ -23,4 +24,10 @@
 # define KWHT "\x1B[37m"
 # define KRT  "\033[1;0m"
 
+/* ------------------- DEBUG ------------------- */
+# define DEBUG 0
+
 #endif
+
+/* -------------- Libft functions -------------- */
+int	ft_atoi(const char *str);
