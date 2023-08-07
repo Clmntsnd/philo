@@ -4,7 +4,7 @@ NAME		=	philo
 
 # -- Compilation Flag -- #
 CC			=	gcc
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror -pthread
 # CFLAGS	=	-Wall -Wextra -Werror -g -Wunreachable-code -fsanitize=address
 # CFLAGS	=	-Wall -Wextra -Werror -g -fsanitize=address
 
