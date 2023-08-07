@@ -24,18 +24,29 @@
 # define KWHT "\x1B[37m"
 # define KRT  "\033[1;0m"
 
-/* ------------------- DEBUG ------------------- */
+//TODO To remove
+/* ---------------- DEBUG & TEST ---------------- */
 # define DEBUG 0
+# define NB	2
 
 /* ------------------ STRUCTS ------------------ */
 typedef struct s_ms
 {
-	int	philo_nb; //number_of_philosophers
-	int	tt_d; //time_to_die
-	int	tt_e; //time_to_eat
-	int	tt_s; //time_to_sleep
-	int meal_nb; //number_of_times_each_philosopher_must_eat
+	int				philo_nb; //number_of_philosophers
+	int				tt_d; //time_to_die
+	int				tt_e; //time_to_eat
+	int				tt_s; //time_to_sleep
+	int 			meal_nb; //number_of_times_each_philosopher_must_eat
+	int				size; 
+	int				i;
+	pthread_mutex_t	m_lock;
 }	t_ms;
+
+typedef struct s_ph
+{
+	int		id;
+	t_ms	*data;
+}	t_ph;
 
 /* -------------- Libft functions -------------- */
 int		ft_atoi(const char *str);

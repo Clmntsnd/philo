@@ -35,7 +35,7 @@ void	ft_err_exit(void)
 	exit (0);
 }
 
-t_ms	*ft_init_ms()
+t_ms	*ft_init_ms(char **av)
 {
 	static t_ms	*ms;
 
@@ -44,11 +44,17 @@ t_ms	*ft_init_ms()
 		ms = ft_calloc(1, sizeof(t_ms));
 		if (!ms)
 			ft_err_exit();
+		ms->i = 0;
+		ms->philo_nb = ft_atoi(av[1]);
+		ms->tt_d = ft_atoi(av[2]);
+		ms->tt_e = ft_atoi(av[3]);
+		ms->tt_s = ft_atoi(av[4]);
+		ms->meal_nb = ft_atoi(av[5]);
 	}
 	return (ms);
 }
 
-bool ft_valid_arg(int ac, char **av, t_ms *ms)
+bool ft_valid_arg(int ac, t_ms *ms)
 {
 	if (ac < 5)
 		return(printf("❌"KRED" Not enough arguments ❌\n"KRT), false);
@@ -56,11 +62,7 @@ bool ft_valid_arg(int ac, char **av, t_ms *ms)
 		return(printf("❌"KRED" Too many arguments ❌\n"KRT), false);
 	else
 	{
-		printf("Welcome to my "KCYN"%s"KRT" program\n", av[0]);
-		ms->philo_nb = ft_atoi(av[1]);
-		ms->tt_d = ft_atoi(av[2]);
-		ms->tt_e = ft_atoi(av[3]);
-		ms->tt_s = ft_atoi(av[4]);
+		printf("Welcome to my "KCYN"%s"KRT" program\n", "./philo");
 		if (DEBUG)
 		{
 			printf(KITA KGRE"\n* --- DEBUG in ft_is_valid arg starts --- *\n");
@@ -69,30 +71,80 @@ bool ft_valid_arg(int ac, char **av, t_ms *ms)
 			printf("tt_e = %d\n", ms->tt_e);
 			printf("tt_s = %d\n", ms->tt_s);
 			if (ac < 6)
-				printf("* --- DEBUG in ft_is_valid arg ends --- *\n"KRT);
+				printf("* --- DEBUG in ft_is_valid arg ends --- *\n\n"KRT);
 		}
 		
 		if (ac == 6)
 		{
-			ms->meal_nb = ft_atoi(av[5]);
 			if (DEBUG)
 			{
 				printf("meal_nb = %d\n", ms->meal_nb);
-				printf("* --- DEBUG in ft_is_valid arg ends --- *\n"KRT);
+				printf("* --- DEBUG in ft_is_valid arg ends --- *\n\n"KRT);
 			}
 		}
 	}
 	return(true);
 }
 
+void	*routine(void *arg)
+{
+	//to pass arg to 'routine' we need to use a 'void *arg' to the ft, and then cast the correct data value to it.
+	t_ph	*ph;
+	int		loop = 1;
+	int		time = 0;
+
+	//cast the void *arg 
+	ph = (t_ph *)arg; 
+	if (ph->id % 2 == 0)
+		usleep(500);
+	while (loop)
+	{
+		usleep(500);
+		pthread_mutex_lock(&ph->data->m_lock);
+		if (ph->data->i < NB * 100)
+		{
+			printf("id %d eat %d\n", ph->id, ph->data->i);
+			ph->data->i += 1;
+			time++;
+		}
+		else
+			loop = 0;
+		pthread_mutex_unlock(&ph->data->m_lock);
+	}
+	printf("id %d time call = %d\n", ph->id, time);
+	return (arg);
+}
+
+void	ft_create_th(t_ms *ms)
+{
+	pthread_t	t[NB];
+	t_ph		ph[NB];
+	int			i = 0;
+
+	pthread_mutex_init(&ms->m_lock, NULL);
+	while (i < NB)
+	{
+		ph[i].id = i + 1;
+		ph[i].data = ms;
+		i++;
+	}
+	i = - 1;
+	while (++i < NB)
+		pthread_create(&t[i], NULL, &routine, &ph[i]);
+	i = -1;
+	while (++i < NB)
+		pthread_join(t[i] , NULL);
+	pthread_mutex_destroy(&ms->m_lock);
+}
 
 int main (int ac, char **av)
 { 	
 	t_ms	*ms;
 
-	ms = ft_init_ms();
-	if(!ft_valid_arg(ac, av, ms))
+	ms = ft_init_ms(av); //TODO init the structure only if the args are valid
+	if(!ft_valid_arg(ac, ms))
 		return (1);
+	ft_create_th(ms);
 	printf("\n🚧 "KYEL"Work In Progress 🚧\n"KRT);
 	return(0);
 }

@@ -49,17 +49,17 @@ void	*task(void *in)
 
 int	main(void)
 {
-	t_main	info;
-	info.i = 0;
+	t_main	ms;
+	ms.i = 0;
 	int		i = 0;
 	pthread_t	t[NB];
 	t_ph		ph[NB];
 
-	pthread_mutex_init(&info.lock, NULL);
+	pthread_mutex_init(&ms.lock, NULL);
 	while (i < NB)
 	{
 		ph[i].id = i + 1;
-		ph[i].data = &info;
+		ph[i].data = &ms;
 		i++;
 	}
 	i = - 1;
@@ -68,6 +68,6 @@ int	main(void)
 	i = -1;
 	while (++i < NB)
 		pthread_join(t[i] , NULL);
-	pthread_mutex_destroy(&info.lock);
+	pthread_mutex_destroy(&ms.lock);
 	return (0);
 }
