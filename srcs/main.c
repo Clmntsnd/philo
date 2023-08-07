@@ -88,30 +88,40 @@ bool ft_valid_arg(int ac, t_ms *ms)
 
 void	*routine(void *arg)
 {
+	/* --	Remember that this fucntion will be executed by each threads ! ---	*/
+
 	//to pass arg to 'routine' we need to use a 'void *arg' to the ft, and then cast the correct data value to it.
 	t_ph	*ph;
 	int		loop = 1;
 	int		time = 0;
 
-	//cast the void *arg 
-	ph = (t_ph *)arg; 
+	//cast the void *arg to the correct value type
+	ph = (t_ph *)arg;
+
+	//if philo is an even number, sleep for 500ms to staggered when they are called
 	if (ph->id % 2 == 0)
 		usleep(500);
+	
+	//while loop until loop is equal to 0 (i.e that'd break the loop)
 	while (loop)
 	{
 		usleep(500);
+		//lock the values, 'time', 'i' and 'loop' 
 		pthread_mutex_lock(&ph->data->m_lock);
-		if (ph->data->i < NB * 100)
+		//until the NB value is reached print the message [id X eat Y], X is the philo's id, Y is the index (i.e the nbr of time they eat) 
+		if (ph->data->i < NB)
 		{
 			printf("id %d eat %d\n", ph->id, ph->data->i);
-			ph->data->i += 1;
-			time++;
+			(ph->data->i)++; //increment the index (i.e the nbr of time they eat)
+			time++; //increment this value to count each time a philo is called
 		}
+		//once there is no philo left, flip the switch to break the loop
 		else
 			loop = 0;
 		pthread_mutex_unlock(&ph->data->m_lock);
 	}
-	printf("id %d time call = %d\n", ph->id, time);
+	//print message, [id X time called]
+	printf("[id %d] called %d times\n", ph->id, time);
 	return (arg);
 }
 
@@ -121,29 +131,33 @@ void	ft_create_th(t_ms *ms)
 	t_ph		ph[NB];
 	int			i = 0;
 
+	//Init mutex 'm_lock' to use it in the routine ft
 	pthread_mutex_init(&ms->m_lock, NULL);
+	//while 'i' is less than NB, attributes the philo id value and attributes the ms struct where each philo will have its own data
 	while (i < NB)
 	{
-		ph[i].id = i + 1;
-		ph[i].data = ms;
+		ph[i].id = i + 1; //assign the id per 'i + 1' (to start the 1st id to 1)
+		ph[i].data = ms; //assign the data to each philo
 		i++;
 	}
 	i = - 1;
 	while (++i < NB)
-		pthread_create(&t[i], NULL, &routine, &ph[i]);
+		pthread_create(&t[i], NULL, &routine, &ph[i]); //create all threads
 	i = -1;
 	while (++i < NB)
-		pthread_join(t[i] , NULL);
+		pthread_join(t[i] , NULL); //join al threads
+	//Destroy the mutex ('clean/free' it)
 	pthread_mutex_destroy(&ms->m_lock);
 }
 
 int main (int ac, char **av)
 { 	
+	(void)ac;
 	t_ms	*ms;
 
-	ms = ft_init_ms(av); //TODO init the structure only if the args are valid
-	if(!ft_valid_arg(ac, ms))
-		return (1);
+	ms = ft_init_ms(av); //TODO init the structure only if the args are valid (i.e move it in ft_valid_args)
+	// if(!ft_valid_arg(ac, ms))
+	// 	return (1);
 	ft_create_th(ms);
 	printf("\n🚧 "KYEL"Work In Progress 🚧\n"KRT);
 	return(0);

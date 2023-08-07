@@ -27,7 +27,7 @@
 //TODO To remove
 /* ---------------- DEBUG & TEST ---------------- */
 # define DEBUG 0
-# define NB	2
+# define NB	3
 
 /* ------------------ STRUCTS ------------------ */
 typedef struct s_ms
