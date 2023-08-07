@@ -27,7 +27,18 @@
 /* ------------------- DEBUG ------------------- */
 # define DEBUG 0
 
-#endif
+/* ------------------ STRUCTS ------------------ */
+typedef struct s_ms
+{
+	int	philo_nb; //number_of_philosophers
+	int	tt_d; //time_to_die
+	int	tt_e; //time_to_eat
+	int	tt_s; //time_to_sleep
+	int meal_nb; //number_of_times_each_philosopher_must_eat
+}	t_ms;
 
 /* -------------- Libft functions -------------- */
-int	ft_atoi(const char *str);
+int		ft_atoi(const char *str);
+void	*ft_calloc(size_t count, size_t size);
+
+#endif

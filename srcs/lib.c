@@ -26,3 +26,17 @@ int	ft_atoi(const char *str)
 	}
 	return (sign * res);
 }
+
+void	*ft_calloc(size_t count, size_t size)
+{
+	size_t	i;
+	char	*dest;
+
+	dest = (void *)malloc(size * count);
+	if (!dest)
+		return (0);
+	i = 0;
+	while (i < (count * size))
+		dest[i++] = 0;
+	return (dest);
+}

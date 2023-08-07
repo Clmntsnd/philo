@@ -29,15 +29,27 @@
 **	• Again, philosophers should avoid dying!
 */
 
-bool ft_valid_arg(int ac, char **av)
+void	ft_err_exit(void)
 {
-	int philo_nb;
-	int	tt_d; //time_to_die
-	int	tt_e; //time_to_eat
-	int	tt_s; //time_to_sleep
-	int meal_nb; //number_of_times_each_philosopher_must_eat
+	printf("❌"KRED" Memory allocation failed ❌\n"KRT);
+	exit (0);
+}
 
-	(void)av;
+t_ms	*ft_init_ms()
+{
+	static t_ms	*ms;
+
+	if (!ms)
+	{
+		ms = ft_calloc(1, sizeof(t_ms));
+		if (!ms)
+			ft_err_exit();
+	}
+	return (ms);
+}
+
+bool ft_valid_arg(int ac, char **av, t_ms *ms)
+{
 	if (ac < 5)
 		return(printf("❌"KRED" Not enough arguments ❌\n"KRT), false);
 	else if (ac > 6)
@@ -45,27 +57,27 @@ bool ft_valid_arg(int ac, char **av)
 	else
 	{
 		printf("Welcome to my "KCYN"%s"KRT" program\n", av[0]);
-		philo_nb = ft_atoi(av[1]);
-		tt_d = ft_atoi(av[2]);
-		tt_e = ft_atoi(av[3]);
-		tt_s = ft_atoi(av[4]);
+		ms->philo_nb = ft_atoi(av[1]);
+		ms->tt_d = ft_atoi(av[2]);
+		ms->tt_e = ft_atoi(av[3]);
+		ms->tt_s = ft_atoi(av[4]);
 		if (DEBUG)
 		{
 			printf(KITA KGRE"\n* --- DEBUG in ft_is_valid arg starts --- *\n");
-			printf("philo_nb = %d\n", philo_nb);
-			printf("tt_d = %d\n", tt_d);
-			printf("tt_e = %d\n", tt_e);
-			printf("tt_s = %d\n", tt_s);
+			printf("philo_nb = %d\n", ms->philo_nb);
+			printf("tt_d = %d\n", ms->tt_d);
+			printf("tt_e = %d\n", ms->tt_e);
+			printf("tt_s = %d\n", ms->tt_s);
 			if (ac < 6)
 				printf("* --- DEBUG in ft_is_valid arg ends --- *\n"KRT);
 		}
 		
 		if (ac == 6)
 		{
-			meal_nb = ft_atoi(av[5]);
+			ms->meal_nb = ft_atoi(av[5]);
 			if (DEBUG)
 			{
-				printf("meal_nb = %d\n", meal_nb);
+				printf("meal_nb = %d\n", ms->meal_nb);
 				printf("* --- DEBUG in ft_is_valid arg ends --- *\n"KRT);
 			}
 		}
@@ -76,9 +88,11 @@ bool ft_valid_arg(int ac, char **av)
 
 int main (int ac, char **av)
 { 	
-	(void)ac;
-	if(!ft_valid_arg(ac, av))
-		return (1);	
+	t_ms	*ms;
+
+	ms = ft_init_ms();
+	if(!ft_valid_arg(ac, av, ms))
+		return (1);
 	printf("\n🚧 "KYEL"Work In Progress 🚧\n"KRT);
 	return(0);
 }
