@@ -29,12 +29,6 @@
 **	• Again, philosophers should avoid dying!
 */
 
-void	ft_err_exit(void)
-{
-	printf("❌"KRED" Memory allocation failed ❌\n"KRT);
-	exit (0);
-}
-
 t_ms	*ft_init_ms(char **av)
 {
 	static t_ms	*ms;
@@ -54,75 +48,9 @@ t_ms	*ft_init_ms(char **av)
 	return (ms);
 }
 
-bool ft_valid_arg(int ac, t_ms *ms)
-{
-	if (ac < 5)
-		return(printf("❌"KRED" Not enough arguments ❌\n"KRT), false);
-	else if (ac > 6)
-		return(printf("❌"KRED" Too many arguments ❌\n"KRT), false);
-	else
-	{
-		printf("Welcome to my "KCYN"%s"KRT" program\n", "./philo");
-		if (DEBUG)
-		{
-			printf(KITA KGRE"\n* --- DEBUG in ft_is_valid arg starts --- *\n");
-			printf("philo_nb = %d\n", ms->philo_nb);
-			printf("tt_d = %d\n", ms->tt_d);
-			printf("tt_e = %d\n", ms->tt_e);
-			printf("tt_s = %d\n", ms->tt_s);
-			if (ac < 6)
-				printf("* --- DEBUG in ft_is_valid arg ends --- *\n\n"KRT);
-		}
-		
-		if (ac == 6)
-		{
-			if (DEBUG)
-			{
-				printf("meal_nb = %d\n", ms->meal_nb);
-				printf("* --- DEBUG in ft_is_valid arg ends --- *\n\n"KRT);
-			}
-		}
-	}
-	return(true);
-}
-
 void	*routine(void *arg)
 {
-	/* --	Remember that this fucntion will be executed by each threads ! ---	*/
-
-	//to pass arg to 'routine' we need to use a 'void *arg' to the ft, and then cast the correct data value to it.
-	t_ph	*ph;
-	int		loop = 1;
-	int		time = 0;
-
-	//cast the void *arg to the correct value type
-	ph = (t_ph *)arg;
-
-	//if philo is an even number, sleep for 500ms to staggered when they are called
-	if (ph->id % 2 == 0)
-		usleep(500);
-	
-	//while loop until loop is equal to 0 (i.e that'd break the loop)
-	while (loop)
-	{
-		usleep(500);
-		//lock the values, 'time', 'i' and 'loop' 
-		pthread_mutex_lock(&ph->data->m_lock);
-		//until the NB value is reached print the message [id X eat Y], X is the philo's id, Y is the index (i.e the nbr of time they eat) 
-		if (ph->data->i < NB)
-		{
-			printf("id %d eat %d\n", ph->id, ph->data->i);
-			(ph->data->i)++; //increment the index (i.e the nbr of time they eat)
-			time++; //increment this value to count each time a philo is called
-		}
-		//once there is no philo left, flip the switch to break the loop
-		else
-			loop = 0;
-		pthread_mutex_unlock(&ph->data->m_lock);
-	}
-	//print message, [id X time called]
-	printf("[id %d] called %d times\n", ph->id, time);
-	return (arg);
+	//TODO code routine for each phi
 }
 
 void	ft_create_th(t_ms *ms)
@@ -152,13 +80,13 @@ void	ft_create_th(t_ms *ms)
 
 int main (int ac, char **av)
 { 	
-	(void)ac;
-	t_ms	*ms;
+	t_ms	*ms = NULL;
 
-	ms = ft_init_ms(av); //TODO init the structure only if the args are valid (i.e move it in ft_valid_args)
-	// if(!ft_valid_arg(ac, ms))
-	// 	return (1);
-	ft_create_th(ms);
+	if(!ft_init_arg(ac, av))
+		return (1);
+	ms = ft_init_ms(av);
+	print_debug(ac);
+	// ft_create_th(ms);
 	printf("\n🚧 "KYEL"Work In Progress 🚧\n"KRT);
 	return(0);
 }

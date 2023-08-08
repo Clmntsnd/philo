@@ -26,7 +26,7 @@
 
 //TODO To remove
 /* ---------------- DEBUG & TEST ---------------- */
-# define DEBUG 0
+# define DEBUG 1
 # define NB	3
 
 /* ------------------ STRUCTS ------------------ */
@@ -49,7 +49,18 @@ typedef struct s_ph
 }	t_ph;
 
 /* -------------- Libft functions -------------- */
+long	ft_atol(const char *str);
 int		ft_atoi(const char *str);
 void	*ft_calloc(size_t count, size_t size);
+size_t	ft_strlen(const char *s);
+bool	ft_isdigit(const char *str);
+long	ft_atol(const char *str);
+
+/* ------------------ Parsing ------------------ */
+bool ft_init_arg(int ac, char **av);
+
+//TODO To remove
+void	print_debug(int ac);
+
 
 #endif

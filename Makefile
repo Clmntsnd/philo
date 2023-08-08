@@ -14,7 +14,9 @@ RM			=	rm -rf
 # -- SRC Files -- #
 SRCS_DIR	=	./srcs/
 SRCS_LST	= 	main.c \
-				lib.c
+				lib.c \
+				parsing.c \
+				utils.c
 
 SRCS		=	$(addprefix $(SRCS_DIR), $(SRCS_LST))
 
