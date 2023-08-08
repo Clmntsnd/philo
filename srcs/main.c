@@ -88,5 +88,8 @@ int main (int ac, char **av)
 	print_debug(ac);
 	// ft_create_th(ms);
 	printf("\n🚧 "KYEL"Work In Progress 🚧\n"KRT);
+	
+	//test ceci est un test
+
 	return(0);
 }
