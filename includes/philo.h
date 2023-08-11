@@ -26,7 +26,7 @@
 
 //TODO To remove
 /* ---------------- DEBUG & TEST ---------------- */
-# define DEBUG 1
+# define DEBUG 0
 # define NB	3
 
 /* ------------------ STRUCTS ------------------ */
@@ -59,8 +59,10 @@ long	ft_atol(const char *str);
 /* ------------------ Parsing ------------------ */
 bool ft_init_arg(int ac, char **av);
 
+void	ft_err_exit(void);
+
 //TODO To remove
-void	print_debug(int ac);
+void	print_debug(int ac, t_ms *ms);
 
 
 #endif

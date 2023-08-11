@@ -1,0 +1,12 @@
+Welcome to my [36m./philo[1;0m program
+id 1 is thinking 0
+id 3 is thinking 1
+id 2 is thinking 2
+id 4 is thinking 3
+id 1 time call = 1
+id 3 time call = 1
+id 2 time call = 1
+id 4 time call = 1
+
+🚧 [33mWork In Progress 🚧
+[1;0m

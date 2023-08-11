@@ -6,7 +6,7 @@ void	ft_err_exit(void)
 	exit (0);
 }
 
-void	print_debug(int ac)
+void	print_debug(int ac, t_ms *ms)
 {
 	if (DEBUG)
 	{

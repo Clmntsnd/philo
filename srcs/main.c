@@ -12,7 +12,7 @@
 **																	the simulation stops. If not specified, the simulation stops when a philosopher dies.
 **	• Each philosopher has a number ranging from 1 to number_of_philosophers.
 **	• Philosopher number 1 sits next to philosopher number number_of_philosophers. 
-**	• Any other philosopher number N sits between philosopher number N - 1 and philoso- pher number N + 1.
+**	• Any other philosopher number N sits between philosopher number N - 1 and philosopher number N + 1.
 **
 **	LOGS
 **	About the logs of your program:
@@ -51,28 +51,55 @@ t_ms	*ft_init_ms(char **av)
 void	*routine(void *arg)
 {
 	//TODO code routine for each phi
+	t_ph	*ph;
+	int loop = 1;
+	int time = 0;
+
+	ph = (t_ph *)arg;
+	if (ph->id % 2 == 0)
+		usleep(500);
+	while (loop)
+	{
+		usleep(500);
+		pthread_mutex_lock(&ph->data->m_lock);
+		ft_think(ph);
+		if (ph->data->i < ph->data->philo_nb)
+		{
+			printf("id %d is thinking %d\n", ph->id, ph->data->i);
+			(ph->data->i)++;
+			time++;
+		}
+		else
+			loop = 0;
+		pthread_mutex_unlock(&ph->data->m_lock);
+	}
+	printf("id %d time call = %d\n", ph->id, time);
+	return (arg);
 }
 
 void	ft_create_th(t_ms *ms)
 {
-	pthread_t	t[NB];
-	t_ph		ph[NB];
+	// pthread_t	t[NB];
+	// t_ph		ph[NB];
+	pthread_t	t[ms->philo_nb];
+	t_ph		ph[ms->philo_nb];
 	int			i = 0;
 
 	//Init mutex 'm_lock' to use it in the routine ft
 	pthread_mutex_init(&ms->m_lock, NULL);
 	//while 'i' is less than NB, attributes the philo id value and attributes the ms struct where each philo will have its own data
-	while (i < NB)
+	while (i < ms->philo_nb)
 	{
 		ph[i].id = i + 1; //assign the id per 'i + 1' (to start the 1st id to 1)
 		ph[i].data = ms; //assign the data to each philo
 		i++;
 	}
 	i = - 1;
-	while (++i < NB)
-		pthread_create(&t[i], NULL, &routine, &ph[i]); //create all threads
+	while (++i < ms->philo_nb)
+		pthread_create(&t[i], NULL, &routine, &ph[i]); 
+		//create all threads, each thread (t[i]) will execute the task ('routine') with each philo as the argument for the routine
 	i = -1;
-	while (++i < NB)
+	while (++i < ms->philo_nb)
 		pthread_join(t[i] , NULL); //join al threads
 	//Destroy the mutex ('clean/free' it)
 	pthread_mutex_destroy(&ms->m_lock);
@@ -85,8 +112,8 @@ int main (int ac, char **av)
 	if(!ft_init_arg(ac, av))
 		return (1);
 	ms = ft_init_ms(av);
-	print_debug(ac);
-	// ft_create_th(ms);
+	print_debug(ac, ms);
+	ft_create_th(ms);
 	printf("\n🚧 "KYEL"Work In Progress 🚧\n"KRT);
 	
 	//test ceci est un test
