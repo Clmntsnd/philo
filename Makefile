@@ -1,3 +1,29 @@
+# -- Banner -- #
+define BANNER1
+
+$A	██████$B╗ $A██$B╗  $A██$B╗$A██$B╗$A██$B╗      $A██████$B╗ 
+$A	██$B╔══$A██$B╗$A██$B║  $A██$B║$A██$B║$A██$B║     $A██$B╔═══$A██$B╗
+$A	██████$B╔╝$A███████$B║$A██$B║$A██$B║     $A██$B║   $A██$B║
+$A	██$B╔═══╝ $A██$B╔══$A██$B║$A██$B║$A██$B║     $A██$B║   $A██$B║
+$A	██$B║     $A██$B║  $A██$B║$A██$B║$A███████$B╗╚$A██████$B╔╝
+$B	╚═╝     ╚═╝  ╚═╝╚═╝╚══════╝ ╚═════╝
+endef
+export BANNER1
+
+define BANNER2
+$B	Usage : $A./$(NAME) $B[$A1$B] [$A2$B] [$A3$B] [$A4$B] $(ITA)[5]$(RST)
+
+$B	[$A1$B] ->	Number of philosophers
+	[$A2$B] ->	Time to die [in ms]
+	[$A3$B] ->	Time to eat [in ms]
+	[$A4$B] ->	Time to sleep [in ms]
+
+$(ITA)	(optionnal)
+	[5] ->	Number of times each philosopher must eat $(RST)
+
+$B	Done by $Acsenand $Bat $A42Quebec
+endef
+export BANNER2
 
 # -- Executable's name -- #
 NAME		=	philo
@@ -40,20 +66,28 @@ BLUE		= 	\033[0;34m
 PURPLE		= 	\033[0;35m
 CYAN		= 	\033[0;36m
 ERASE_LINE 	= 	\033[2K\r
+ITA			=	\x1B[3m
+RST			=	\033[1;0m
+A 			= 	$(BLUE)
+B 			= 	$(PURPLE)
 
 EVALUATOR = $(shell whoami)
 
 # -- Executable's creation -- #
 all : dir $(NAME)
+	@clear
+	@echo "$$BANNER1\n"
+	@echo "$$BANNER2"
 
 # -- Compile library -- #
 $(NAME) : $(OBJS)
-	@$(CC) $(CFLAGS) $(SRCS) $(LIBFT) $(RLINE) -lncurses -o $(NAME) -D EVALUATOR=\"$(EVALUATOR)\" -D BANNER=\"$(TIME)\"
-	@echo "✅ $(GREEN)$(NAME)'s exectuable successfully created.		✅$(RESET)"
+	@$(CC) $(CFLAGS) $(SRCS) -o $(NAME)
+	@echo "✅/t$(GREEN)$(NAME)'s exectuable successfully created.		✅$(RESET)"
+	@sleep 0.75
 
 # -- Create all files .o (object) from files .c (source code) -- #
 $(OBJS_DIR)%.o : $(SRCS_DIR)%.c $(HEADER)
-	@printf "$(ERASE_LINE)🎛️  $(PURPLE)Compiling $(YELLOW)$(notdir $<)\r$(RESET)"
+	@printf "$(ERASE_LINE)🎛️/t$(PURPLE)Compiling $(YELLOW)$(notdir $<)\r$(RESET)"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 run: all
@@ -74,6 +108,7 @@ leaks: all
 
 # -- Removes objects -- #
 clean :
+	@echo "$$BANNER1\n"
 	@printf "💥 $(RED)Removing $(NAME)'s objects...$(RESET)\t\t\t\t💥\n"
 	@$(RM) $(OBJS_DIR)
 	@printf "🗑️  $(CYAN)$(NAME)'s object successfully deleted.$(RESET)\t\t\t🗑️\n"

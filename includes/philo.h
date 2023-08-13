@@ -33,7 +33,6 @@
 # define ERR_TIME	"❌ Oops ! Issues with an argument (invalid time (< 60 ms)) ❌"
 # define ERR_NB_EAT	"❌ Oops ! Issues with an argument (invalid times to eat) ❌"
 
-
 //TODO To remove
 /* ---------------- DEBUG & TEST ---------------- */
 # define DEBUG	0
