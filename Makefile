@@ -18,7 +18,7 @@ $B	[$A1$B] ->	Number of philosophers
 	[$A3$B] ->	Time to eat [in ms]
 	[$A4$B] ->	Time to sleep [in ms]
 
-$(ITA)	(optionnal)
+$(ITA)	(optional)
 	[5] ->	Number of times each philosopher must eat $(RST)
 
 $B	Done by $Acsenand $Bat $A42Quebec
