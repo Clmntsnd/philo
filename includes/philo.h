@@ -40,6 +40,7 @@
 # define NB		3
 
 /* ------------------ STRUCTS ------------------ */
+//add a variable to keep track of the nb of meal taken by each philo
 typedef struct s_ms
 {
 	int				philo_nb;	//number_of_philosophers
