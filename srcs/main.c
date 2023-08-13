@@ -48,32 +48,35 @@ t_ms	*ft_init_ms(char **av)
 	return (ms);
 }
 
+void	ft_think(t_ph *ph)
+{
+	usleep(500);
+	pthread_mutex_lock(&ph->data->m_lock);
+	printf("id %d is thinking\n", ph->id);
+	pthread_mutex_unlock(&ph->data->m_lock);
+}
+
 void	*routine(void *arg)
 {
-	//TODO code routine for each phi
+
 	t_ph	*ph;
-	int loop = 1;
-	int time = 0;
+	// int loop = 1;
+	int times = -1; //nb of times an action needs to be done
 
 	ph = (t_ph *)arg;
 	if (ph->id % 2 == 0)
 		usleep(500);
-	while (loop)
-	{
-		usleep(500);
-		pthread_mutex_lock(&ph->data->m_lock);
+	while (++times < ph->data->meal_nb)
 		ft_think(ph);
-		if (ph->data->i < ph->data->philo_nb)
-		{
-			printf("id %d is thinking %d\n", ph->id, ph->data->i);
-			(ph->data->i)++;
-			time++;
-		}
-		else
-			loop = 0;
-		pthread_mutex_unlock(&ph->data->m_lock);
-	}
-	printf("id %d time call = %d\n", ph->id, time);
+	
+	/*
+	**	I needed to put a usleep(10000) and a mutex lock/unlock
+	**	for the message to be correctly printed on the prompt
+	*/
+	usleep(10000);
+	pthread_mutex_lock(&ph->data->m_lock);
+	printf("id %d was called %d times\n", ph->id, times);
+	pthread_mutex_unlock(&ph->data->m_lock);
 	return (arg);
 }
 
@@ -97,7 +100,7 @@ void	ft_create_th(t_ms *ms)
 	i = - 1;
 	while (++i < ms->philo_nb)
 		pthread_create(&t[i], NULL, &routine, &ph[i]); 
-		//create all threads, each thread (t[i]) will execute the task ('routine') with each philo as the argument for the routine
+		//create all threads, each thread (t[i]) will execute the task 'routine' with each philo as the argument for the routine
 	i = -1;
 	while (++i < ms->philo_nb)
 		pthread_join(t[i] , NULL); //join al threads
@@ -114,9 +117,7 @@ int main (int ac, char **av)
 	ms = ft_init_ms(av);
 	print_debug(ac, ms);
 	ft_create_th(ms);
-	printf("\n🚧 "KYEL"Work In Progress 🚧\n"KRT);
-	
-	//test ceci est un test
+	// printf("\n🚧 "KYEL"Work In Progress 🚧\n"KRT);
 
 	return(0);
 }

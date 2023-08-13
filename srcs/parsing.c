@@ -23,36 +23,36 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-bool ft_init_arg(int ac, char **av)
+bool	ft_check(char **av)
 {
 	int i;
 
-	if (ac < 5)
-		return(printf("❌"KRED" Not enough arguments ❌\n"KRT), false);
-	else if (ac > 6)
-		return(printf("❌"KRED" Too many arguments ❌\n"KRT), false);
-	else
+	i = 0;
+	while (av[++i])
+		if (!ft_isdigit(av[i])) 
+			return (printf("%s%s%s\n", KRED, ERR_DIGIT, KRT), false);
+	if (ft_atoi(av[1]) < 1 || ft_atoi(av[1]) > 200)
+		return (printf("%s%s%s\n", KRED, ERR_PH_NB, KRT), false);
+	i = 1;
+	while(av[++i])
 	{
-		i = 0;
-		//first check to look for a non digit character
-		while (av[++i])
-			if (ft_isdigit(av[i]) == false) 
-				return (printf("❌"KRED" Oups ! Issues with an argument (only digits above 0 are accepted) ❌\n"KRT), false);
-		//check if 0 < philo_nb < 200
-		if (ft_atoi(av[1]) < 1 || ft_atoi(av[1]) > 200) 
-			return (printf("❌"KRED" Oups ! Issues with argv[1] (0 < philosophers numbers < 200) ❌\n"KRT), false);
-		//check to see there is a nbr above INT_MAX
-		i = 1;
-		while(av[++i])
-		{
-			if (ft_strlen(av[i]) > 10 || ft_atol(av[i]) > INT32_MAX) 
-				return (printf("❌"KRED" Oups ! Issues with an argument (not a valid integer) ❌\n"KRT), false);
-			if (i < 5 && ft_atoi(av[i]) < 60)
-					return (printf("❌"KRED" Oups ! Issues with an argument (invalid time (< 60 ms)) ❌\n"KRT), false);
-			if (i == 5 && ft_atoi(av[5]) < 1)
-					return (printf("❌"KRED" Oups ! Issues with an argument (invalid times to eat) ❌\n"KRT), false);
-		}
+		if (ft_strlen(av[i]) > 10 || ft_atol(av[i]) > INT32_MAX) 
+			return (printf("%s%s%s\n", KRED, ERR_INT, KRT), false);
+		if (i < 5 && ft_atoi(av[i]) < 60)
+			return (printf("%s%s%s\n", KRED, ERR_TIME, KRT), false);
+		if (i == 5 && ft_atoi(av[5]) < 1)
+			return (printf("%s%s%s\n", KRED, ERR_NB_EAT, KRT), false);
 	}
-		printf("Welcome to my "KCYN"%s"KRT" program\n", "./philo");
+	return(true);
+}
+
+bool ft_init_arg(int ac, char **av)
+{
+	if (ac < 5)
+		return (printf("%s%s%s\n", KRED, ERR_ARG1, KRT), false);
+	else if (ac > 6)
+		return (printf("%s%s%s\n", KRED, ERR_ARG2, KRT), false);
+	else if(!ft_check(av))
+		return(false);
 	return(true);
 }

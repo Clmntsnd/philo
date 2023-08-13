@@ -1,12 +1,23 @@
-Welcome to my [36m./philo[1;0m program
-id 1 is thinking 0
-id 3 is thinking 1
-id 2 is thinking 2
-id 4 is thinking 3
-id 1 time call = 1
-id 3 time call = 1
-id 2 time call = 1
-id 4 time call = 1
-
-🚧 [33mWork In Progress 🚧
-[1;0m
+❌[31m Oups ! Issues with an argument (invalid time (< 60 ms)) ❌
+[1;0m❌[31m Oups ! Issues with an argument (not a valid integer) ❌
+[1;0m❌[31m Oups ! Issues with an argument (not a valid integer) ❌
+[1;0mid 1 was called 0 times
+id 3 was called 0 times
+id 7 was called 0 times
+id 5 was called 0 times
+id 9 was called 0 times
+id 11 was called 0 times
+id 13 was called 0 times
+id 15 was called 0 times
+id 19 was called 0 times
+id 17 was called 0 times
+id 2 was called 0 times
+id 6 was called 0 times
+id 10 was called 0 times
+id 16 was called 0 times
+id 20 was called 0 times
+id 8 was called 0 times
+id 4 was called 0 times
+id 18 was called 0 times
+id 14 was called 0 times
+id 12 was called 0 times

@@ -10,24 +10,34 @@
 # include <pthread.h>
 
 /* ------------------ COLORS ------------------- */
-# define KNRM "\x1B[m"
-# define BLD "\x1B[1m"
-# define KGRE "\x1B[2m"
-# define KITA "\x1B[3m"
-# define KUND "\x1B[4m"
-# define KRED "\x1B[31m"
-# define KGRN "\x1B[32m"
-# define KYEL "\x1B[33m"
-# define KBLU "\x1B[34m"
-# define KMAG "\x1B[35m"
-# define KCYN "\x1B[36m"
-# define KWHT "\x1B[37m"
-# define KRT  "\033[1;0m"
+# define KNRM	"\x1B[m"
+# define BLD	"\x1B[1m"
+# define KGRE	"\x1B[2m"
+# define KITA	"\x1B[3m"
+# define KUND	"\x1B[4m"
+# define KRED	"\x1B[31m"
+# define KGRN	"\x1B[32m"
+# define KYEL	"\x1B[33m"
+# define KBLU	"\x1B[34m"
+# define KMAG	"\x1B[35m"
+# define KCYN	"\x1B[36m"
+# define KWHT	"\x1B[37m"
+# define KRT	"\033[1;0m"
+
+/* ---------------- ERR_MSGS ------------------ */
+# define ERR_ARG1	"❌ Oops ! Not enough arguments ❌"
+# define ERR_ARG2	"❌ Oops ! Too many arguments ❌"
+# define ERR_DIGIT	"❌ Oops ! Issues with an argument (only digits above 0 are accepted) ❌"
+# define ERR_PH_NB	"❌ Oops ! Issues with argv[1] (0 < philosophers numbers < 200) ❌"
+# define ERR_INT	"❌ Oops ! Issues with an argument (not a valid integer) ❌"
+# define ERR_TIME	"❌ Oops ! Issues with an argument (invalid time (< 60 ms)) ❌"
+# define ERR_NB_EAT	"❌ Oops ! Issues with an argument (invalid times to eat) ❌"
+
 
 //TODO To remove
 /* ---------------- DEBUG & TEST ---------------- */
-# define DEBUG 0
-# define NB	3
+# define DEBUG	0
+# define NB		3
 
 /* ------------------ STRUCTS ------------------ */
 typedef struct s_ms
