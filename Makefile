@@ -68,26 +68,26 @@ CYAN		= 	\033[0;36m
 ERASE_LINE 	= 	\033[2K\r
 ITA			=	\x1B[3m
 RST			=	\033[1;0m
+
+# -- Banner's Colors -- #
 A 			= 	$(BLUE)
 B 			= 	$(PURPLE)
-
-EVALUATOR = $(shell whoami)
 
 # -- Executable's creation -- #
 all : dir $(NAME)
 	@clear
 	@echo "$$BANNER1\n"
-	@echo "$$BANNER2"
+	@echo "$$BANNER2\n"
 
 # -- Compile library -- #
 $(NAME) : $(OBJS)
 	@$(CC) $(CFLAGS) $(SRCS) -o $(NAME)
-	@echo "✅/t$(GREEN)$(NAME)'s exectuable successfully created.		✅$(RESET)"
+	@echo "✅ $(GREEN)$(NAME)'s exectuable successfully created.		✅$(RESET)"
 	@sleep 0.75
 
 # -- Create all files .o (object) from files .c (source code) -- #
 $(OBJS_DIR)%.o : $(SRCS_DIR)%.c $(HEADER)
-	@printf "$(ERASE_LINE)🎛️/t$(PURPLE)Compiling $(YELLOW)$(notdir $<)\r$(RESET)"
+	@printf "$(ERASE_LINE)🎛️ $(PURPLE)Compiling $(YELLOW)$(notdir $<)\r$(RESET)"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 run: all
