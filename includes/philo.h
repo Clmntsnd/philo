@@ -42,12 +42,12 @@
 /* ------------------ STRUCTS ------------------ */
 typedef struct s_ms
 {
-	int				philo_nb; //number_of_philosophers
-	int				tt_d; //time_to_die
-	int				tt_e; //time_to_eat
-	int				tt_s; //time_to_sleep
-	int 			meal_nb; //number_of_times_each_philosopher_must_eat
-	int				size; 
+	int				philo_nb;	//number_of_philosophers
+	int				tt_d;		//time_to_die
+	int				tt_e;		//time_to_eat
+	int				tt_s;		//time_to_sleep
+	int 			meal_nb;	//number_of_times_each_philosopher_must_eat
+	int				size;		
 	int				i;
 	pthread_mutex_t	m_lock;
 }	t_ms;
