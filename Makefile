@@ -42,7 +42,8 @@ SRCS_DIR	=	./srcs/
 SRCS_LST	= 	main.c \
 				lib.c \
 				parsing.c \
-				utils.c
+				utils.c \
+				task.c
 
 SRCS		=	$(addprefix $(SRCS_DIR), $(SRCS_LST))
 
@@ -77,7 +78,7 @@ B 			= 	$(PURPLE)
 all : dir $(NAME)
 	@clear
 	@echo "$$BANNER1\n"
-	@echo "$$BANNER2\n"
+#@echo "$$BANNER2\n" //TODO to unmute
 
 # -- Compile library -- #
 $(NAME) : $(OBJS)

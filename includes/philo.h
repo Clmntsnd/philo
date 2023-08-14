@@ -24,7 +24,7 @@
 # define KWHT	"\x1B[37m"
 # define KRT	"\033[1;0m"
 
-/* ---------------- ERR_MSGS ------------------ */
+/* ---------------- Error Msgs ---------------- */
 # define ERR_ARG1	"❌ Oops ! Not enough arguments ❌"
 # define ERR_ARG2	"❌ Oops ! Too many arguments ❌"
 # define ERR_DIGIT	"❌ Oops ! Issues with an argument (only digits above 0 are accepted) ❌"
@@ -33,6 +33,18 @@
 # define ERR_TIME	"❌ Oops ! Issues with an argument (invalid time (< 60 ms)) ❌"
 # define ERR_NB_EAT	"❌ Oops ! Issues with an argument (invalid times to eat) ❌"
 # define ERR_MEM	"❌ Memory allocation failed ❌"
+
+/* ---------------- Status Msg ---------------- */
+# define THINKING 1
+# define THINK_MSG "is thinking"
+# define EATING 1
+# define EAT_MSG "is eating"
+# define SLEEPING 2
+# define SLEE_MSG "is sleeping"
+# define PICK_RF "has taken the right fork"
+# define PICK_LF "has taken the left fork"
+# define DROP_RF "has dropped the right fork"
+# define DROP_LF "has dropped the left fork"
 
 //TODO To remove
 /* ---------------- DEBUG & TEST ---------------- */
@@ -48,14 +60,20 @@ typedef struct s_ms
 	int				tt_e;		//time_to_eat
 	int				tt_s;		//time_to_sleep
 	int 			meal_nb;	//number_of_times_each_philosopher_must_eat
-	int				size;		
-	int				i;
-	pthread_mutex_t	m_lock;
+	int				size;		//TODO seems obselete
+	int				i;			//TBD
+	int				status;		//while be assign to an int that will be defined above 
+	pthread_mutex_t	m_lock;		
+	pthread_mutex_t	msg;
+	pthread_mutex_t	r_fork;
+	pthread_mutex_t	l_fork;
 }	t_ms;
 
 typedef struct s_ph
 {
 	int		id;
+	int		eat_i;	//eat counter for each philo
+	bool	eating;	//is a philo eating or not?
 	t_ms	*data;
 }	t_ph;
 
@@ -71,6 +89,7 @@ long	ft_atol(const char *str);
 bool ft_init_arg(int ac, char **av);
 
 void	ft_err_exit(void);
+void	*routine(void *arg);
 
 //TODO To remove
 void	print_debug(int ac, t_ms *ms);

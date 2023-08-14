@@ -47,49 +47,35 @@ t_ms	*ft_init_ms(char **av)
 	}
 	return (ms);
 }
-
-void	ft_think(t_ph *ph)
+t_ph	*ft_init_ph(t_ms *ms)
 {
-	usleep(500);
-	pthread_mutex_lock(&ph->data->m_lock);
-	printf("id %d is thinking\n", ph->id);
-	pthread_mutex_unlock(&ph->data->m_lock);
-}
+	static t_ph	*ph;
 
-void	*routine(void *arg)
-{
-
-	t_ph	*ph;
-	// int loop = 1;
-	int times = -1; //nb of times an action needs to be done
-
-	ph = (t_ph *)arg;
-	if (ph->id % 2 == 0)
-		usleep(500);
-	while (++times < ph->data->meal_nb)
-		ft_think(ph);
-	
-	/*
-	**	I needed to put a usleep(10000) and a mutex lock/unlock
-	**	for the message to be correctly printed on the prompt
-	*/
-	usleep(10000);
-	pthread_mutex_lock(&ph->data->m_lock);
-	printf("id %d was called %d times\n", ph->id, times);
-	pthread_mutex_unlock(&ph->data->m_lock);
-	return (arg);
+	if (!ph)
+	{
+		ph = ft_calloc(1, sizeof(t_ph));
+		if (!ph)
+			ft_err_exit();
+		ph->eating = false;
+		ph->data = ms;
+		ph->eat_i = 0;
+	}
+	return (ph);
 }
 
 void	ft_create_th(t_ms *ms)
 {
-	// pthread_t	t[NB];
-	// t_ph		ph[NB];
 	pthread_t	t[ms->philo_nb];
-	t_ph		ph[ms->philo_nb];
+	t_ph		*ph;
 	int			i = 0;
+
+	ph = ft_init_ph(ms);
 
 	//Init mutex 'm_lock' to use it in the routine ft
 	pthread_mutex_init(&ms->m_lock, NULL);
+	pthread_mutex_init(&ms->r_fork, NULL);
+	pthread_mutex_init(&ms->l_fork, NULL);
+	pthread_mutex_init(&ms->msg, NULL);
 	//while 'i' is less than NB, attributes the philo id value and attributes the ms struct where each philo will have its own data
 	while (i < ms->philo_nb)
 	{
@@ -106,11 +92,15 @@ void	ft_create_th(t_ms *ms)
 		pthread_join(t[i] , NULL); //join al threads
 	//Destroy the mutex ('clean/free' it)
 	pthread_mutex_destroy(&ms->m_lock);
+	pthread_mutex_destroy(&ms->r_fork);
+	pthread_mutex_destroy(&ms->l_fork);
+	pthread_mutex_destroy(&ms->msg);
 }
 
 int main (int ac, char **av)
 { 	
 	t_ms	*ms = NULL;
+	// t_ph	*ph = NULL;
 
 	if(!ft_init_arg(ac, av))
 		return (1);
