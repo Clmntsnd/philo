@@ -32,6 +32,7 @@
 # define ERR_INT	"❌ Oops ! Issues with an argument (not a valid integer) ❌"
 # define ERR_TIME	"❌ Oops ! Issues with an argument (invalid time (< 60 ms)) ❌"
 # define ERR_NB_EAT	"❌ Oops ! Issues with an argument (invalid times to eat) ❌"
+# define ERR_MEM	"❌ Memory allocation failed ❌"
 
 //TODO To remove
 /* ---------------- DEBUG & TEST ---------------- */

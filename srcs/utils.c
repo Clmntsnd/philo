@@ -2,8 +2,8 @@
 
 void	ft_err_exit(void)
 {
-	printf("❌"KRED" Memory allocation failed ❌\n"KRT);
-	exit (0);
+	printf("%s%s%s\n", KRED, ERR_MEM, KRT);
+	exit (3);
 }
 
 void	print_debug(int ac, t_ms *ms)
