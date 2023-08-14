@@ -37,9 +37,9 @@
 /* ---------------- Status Msg ---------------- */
 # define THINKING 1
 # define THINK_MSG "is thinking"
-# define EATING 1
+# define EATING 2
 # define EAT_MSG "is eating"
-# define SLEEPING 2
+# define SLEEPING 3
 # define SLEE_MSG "is sleeping"
 # define PICK_RF "has taken the right fork"
 # define PICK_LF "has taken the left fork"
