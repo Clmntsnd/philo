@@ -37,7 +37,7 @@ t_ms	*ft_init_ms(char **av)
 	{
 		ms = ft_calloc(1, sizeof(t_ms));
 		if (!ms)
-			ft_err_exit();
+			ft_err_exit(ERR_MEM);
 		ms->i = 0;
 		ms->philo_nb = ft_atoi(av[1]);
 		ms->tt_d = ft_atoi(av[2]);
@@ -47,49 +47,37 @@ t_ms	*ft_init_ms(char **av)
 	}
 	return (ms);
 }
-t_ph	*ft_init_ph(t_ms *ms)
+
+void	ft_init_mutex(t_ms *ms)
 {
-	static t_ph	*ph;
-
-	if (!ph)
-	{
-		ph = ft_calloc(1, sizeof(t_ph));
-		if (!ph)
-			ft_err_exit();
-		ph->eating = false;
-		ph->data = ms;
-		ph->eat_i = 0;
-	}
-	return (ph);
-}
-
-void	ft_create_th(t_ms *ms)
-{
-	pthread_t	t[ms->philo_nb];
-	t_ph		*ph;
-	int			i = 0;
-
-	ph = ft_init_ph(ms);
-
-	//Init mutex 'm_lock' to use it in the routine ft
+	//Init mutexes needed, to use it in the routine ft
 	pthread_mutex_init(&ms->m_lock, NULL);
 	pthread_mutex_init(&ms->r_fork, NULL);
 	pthread_mutex_init(&ms->l_fork, NULL);
 	pthread_mutex_init(&ms->msg, NULL);
-	//while 'i' is less than NB, attributes the philo id value and attributes the ms struct where each philo will have its own data
-	while (i < ms->philo_nb)
-	{
-		ph[i].id = i + 1; //assign the id per 'i + 1' (to start the 1st id to 1)
-		ph[i].data = ms; //assign the data to each philo
-		i++;
-	}
-	i = - 1;
-	while (++i < ms->philo_nb)
-		pthread_create(&t[i], NULL, &routine, &ph[i]); 
-		//create all threads, each thread (t[i]) will execute the task 'routine' with each philo as the argument for the routine
-	i = -1;
-	while (++i < ms->philo_nb)
-		pthread_join(t[i] , NULL); //join al threads
+}
+
+t_ph	*ft_init_ph()
+{
+	static t_ph	*ph;
+
+	if (!ph)
+		ph = ft_calloc(1, sizeof(t_ph));
+	if (!ph)
+		ft_err_exit(ERR_MEM);
+	return (ph);
+}
+
+void	ft_get_ph_data(t_ms *ms, t_ph *ph, int i)
+{
+	ph[i].eating = false;
+	ph[i].eat_i = 0;
+	ph[i].id = i + 1; //assign the id per 'i + 1' (to start the 1st id to 1)
+	ph[i].data = ms; //assign the data to each philo
+}
+
+void	ft_destroy_mtx(t_ms *ms)
+{
 	//Destroy the mutex ('clean/free' it)
 	pthread_mutex_destroy(&ms->m_lock);
 	pthread_mutex_destroy(&ms->r_fork);
@@ -97,16 +85,37 @@ void	ft_create_th(t_ms *ms)
 	pthread_mutex_destroy(&ms->msg);
 }
 
+void	ft_philo(t_ms *ms)
+{
+	pthread_t	t[ms->philo_nb];
+	t_ph		*ph;
+	int			i;
+
+	ph = ft_init_ph();
+	ft_init_mutex(ms);
+	//while 'i' is less than philo_nb, attributes the philo id value and attributes the ms struct where each philo will have its own data
+	i = -1;
+	while (++i < ms->philo_nb)
+		ft_get_ph_data(ms, ph, i);
+	i = - 1;
+	while (++i < ms->philo_nb)
+		pthread_create(&t[i], NULL, &routine, &ph[i]); 
+		//create all threads, each thread (t[i]) will execute the task 'routine' with each philo as the argument for the routine
+	i = -1;
+	while (++i < ms->philo_nb)
+		pthread_join(t[i] , NULL); //join al threads
+	ft_destroy_mtx(ms);
+}
+
 int main (int ac, char **av)
 { 	
 	t_ms	*ms = NULL;
-	// t_ph	*ph = NULL;
 
 	if(!ft_init_arg(ac, av))
 		return (1);
 	ms = ft_init_ms(av);
 	print_debug(ac, ms);
-	ft_create_th(ms);
+	ft_philo(ms);
 	// printf("\n🚧 "KYEL"Work In Progress 🚧\n"KRT);
 
 	return(0);

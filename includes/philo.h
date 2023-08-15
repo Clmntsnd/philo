@@ -27,11 +27,11 @@
 /* ---------------- Error Msgs ---------------- */
 # define ERR_ARG1	"❌ Oops ! Not enough arguments ❌"
 # define ERR_ARG2	"❌ Oops ! Too many arguments ❌"
-# define ERR_DIGIT	"❌ Oops ! Issues with an argument (only digits above 0 are accepted) ❌"
-# define ERR_PH_NB	"❌ Oops ! Issues with argv[1] (0 < philosophers numbers < 200) ❌"
-# define ERR_INT	"❌ Oops ! Issues with an argument (not a valid integer) ❌"
-# define ERR_TIME	"❌ Oops ! Issues with an argument (invalid time (< 60 ms)) ❌"
-# define ERR_NB_EAT	"❌ Oops ! Issues with an argument (invalid times to eat) ❌"
+# define ERR_DIGIT	"❌ Oops ! Error with an argument (only digits above 0 are accepted) ❌"
+# define ERR_PH_NB	"❌ Oops ! Error with argv[1] (0 < philosophers numbers < 200) ❌"
+# define ERR_INT	"❌ Oops ! Error with an argument (not a valid integer) ❌"
+# define ERR_TIME	"❌ Oops ! Error with an argument (invalid time (< 60 ms)) ❌"
+# define ERR_NB_EAT	"❌ Oops ! Error with an argument (invalid times to eat) ❌"
 # define ERR_MEM	"❌ Memory allocation failed ❌"
 
 /* ---------------- Status Msg ---------------- */
@@ -88,7 +88,7 @@ long	ft_atol(const char *str);
 /* ------------------ Parsing ------------------ */
 bool ft_init_arg(int ac, char **av);
 
-void	ft_err_exit(void);
+void	ft_err_exit(char *str);
 void	*routine(void *arg);
 
 //TODO To remove

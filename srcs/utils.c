@@ -1,9 +1,10 @@
 #include "../includes/philo.h"
 
-void	ft_err_exit(void)
+void	ft_err_exit(char *str)
 {
-	printf("%s%s%s\n", KRED, ERR_MEM, KRT);
-	exit (3);
+	printf("%s%s%s\n", KRED, str, KRT);
+	//TODO put free fts here to avoid leaks
+	exit(EXIT_FAILURE);
 }
 
 void	print_debug(int ac, t_ms *ms)
