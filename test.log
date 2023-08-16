@@ -1,24 +1,13 @@
 id 1 is thinking
-id 3 is thinking
-id 3 has taken the right fork
-id 3 has taken the left fork
-id 3 is eating
-id 3 has dropped the left fork
-id 3 has dropped the right fork
-id 3 is thinking
-id 3 has taken the right fork
-id 3 has taken the left fork
-id 3 is eating
-id 3 has dropped the left fork
-id 3 has dropped the right fork
-id 3 is thinking
-id 3 has taken the right fork
-id 3 has taken the left fork
-id 3 is eating
-id 3 has dropped the left fork
-id 3 has dropped the right fork
 id 1 has taken the right fork
 id 1 has taken the left fork
+id 1 is eating
+id 1 has dropped the left fork
+id 1 has dropped the right fork
+id 1 is thinking
+id 1 has taken the right fork
+id 1 has taken the left fork
+id 3 is thinking
 id 1 is eating
 id 1 has dropped the left fork
 id 1 has dropped the right fork
@@ -28,12 +17,23 @@ id 1 has taken the left fork
 id 1 is eating
 id 1 has dropped the left fork
 id 1 has dropped the right fork
-id 1 is thinking
-id 1 has taken the right fork
-id 1 has taken the left fork
-id 1 is eating
-id 1 has dropped the left fork
-id 1 has dropped the right fork
+id 3 has taken the right fork
+id 3 has taken the left fork
+id 3 is eating
+id 3 has dropped the left fork
+id 3 has dropped the right fork
+id 3 is thinking
+id 3 has taken the right fork
+id 3 has taken the left fork
+id 3 is eating
+id 3 has dropped the left fork
+id 3 has dropped the right fork
+id 3 is thinking
+id 3 has taken the right fork
+id 3 has taken the left fork
+id 3 is eating
+id 3 has dropped the left fork
+id 3 has dropped the right fork
 id 2 is thinking
 id 2 has taken the right fork
 id 2 has taken the left fork
@@ -49,10 +49,10 @@ id 2 has dropped the right fork
 id 2 is thinking
 id 2 has taken the right fork
 id 2 has taken the left fork
+id 2 is eating
+id 2 has dropped the left fork
+id 2 has dropped the right fork
 id 4 is thinking
-id 2 is eating
-id 2 has dropped the left fork
-id 2 has dropped the right fork
 id 4 has taken the right fork
 id 4 has taken the left fork
 id 4 is eating
@@ -72,5 +72,5 @@ id 4 has dropped the left fork
 id 4 has dropped the right fork
 id 3 was called 3 times
 id 1 was called 3 times
-id 4 was called 3 times
 id 2 was called 3 times
+id 4 was called 3 times

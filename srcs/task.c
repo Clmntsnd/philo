@@ -12,10 +12,12 @@ a philo has to think whenever he can't eat so it's pretty simple we just have to
 Moving on we have the eating action, this one is going to be divided in four main actions: picking the two forks needed, eating, 
 dropping the forks and sleeping (you can also make sleeping action apart).
 
+**	1st action
 Let's start with the forks picking, this is pretty simple, a philo to pick a fork locks the mutex refered to it so we are going 
 to use the pthread_mutex_lock function. Note that if you consider the philos disposed clockwise you are going to lock the right fork 
 before the left one, if you consider them disposed counterclockwise then you are going to lock the left one first.
 
+** 2nd action
 Now that the philo has taken the forks he need to eat and here we update the status (to do that I've made an int inside the philo struct) 
 of the philo so that the supervisor will know that he's eating and he don't have to die, and then we simply use an usleep 
 (i suggest you to recode it by your self for making it faster, you can find mine in src/utils/utils.c).
@@ -50,21 +52,29 @@ void	ft_eat(t_ph *ph)
 	pthread_mutex_lock(&ph->data->l_fork);
 	printf("id %d %s\n", ph->id, PICK_LF);
 	
-	//
+	//update eating status
 	pthread_mutex_lock(&ph->data->m_lock);
 	ph->eating = true;
 
+	//print 'is eating' msg
 	pthread_mutex_lock(&ph->data->msg);
 	printf("id %d %s\n", ph->id, EAT_MSG);
 	pthread_mutex_unlock(&ph->data->msg);
 
+	//Increment eat_i variable, to count how many times a philo has eaten
+	ph->eat_i++;
+
+	//TODO put a usleep here to represent the time to eat
+
+	//update eating status
+	ph->eating = false;
+	pthread_mutex_unlock(&ph->data->m_lock);
+
+	//drops fork
 	printf("id %d %s\n", ph->id, DROP_LF);
 	pthread_mutex_unlock(&ph->data->l_fork);
-	
 	printf("id %d %s\n", ph->id, DROP_RF);
 	pthread_mutex_unlock(&ph->data->r_fork);
-	
-	pthread_mutex_unlock(&ph->data->m_lock);
 }
 
 void	ft_think(t_ph *ph)
