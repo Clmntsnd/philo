@@ -29,7 +29,7 @@
 **	• Again, philosophers should avoid dying!
 */
 
-t_ms	*ft_init_ms(char **av)
+t_ms	*ft_init_ms(int ac, char **av)
 {
 	static t_ms	*ms;
 
@@ -38,14 +38,41 @@ t_ms	*ft_init_ms(char **av)
 		ms = ft_calloc(1, sizeof(t_ms));
 		if (!ms)
 			ft_err_exit(ERR_MEM);
-		ms->i = 0;
 		ms->philo_nb = ft_atoi(av[1]);
 		ms->tt_d = ft_atoi(av[2]);
 		ms->tt_e = ft_atoi(av[3]);
 		ms->tt_s = ft_atoi(av[4]);
-		ms->meal_nb = ft_atoi(av[5]);
+		if (ac == 6)
+			ms->meal_nb = ft_atoi(av[5]);
+		else 
+			ms->meal_nb = INT_MAX;
+		ms->status = 0;
 	}
 	return (ms);
+}
+
+t_ph	*ft_init_ph(t_ms *ms)
+{
+	static t_ph	*ph;
+	int 		i;
+
+	if (!ph) 
+	{ 
+		ph = ft_calloc(1, sizeof(t_ph));
+		if (!ph)
+			ft_err_exit(ERR_MEM);
+		//while 'i' is less than philo_nb, attributes the philo id value and attributes the ms struct where 
+		// each philo will have its own data
+		i = -1;
+		while (++i < ms->philo_nb)
+		{
+			ph[i].eating = false;
+			ph[i].eat_i = 0;
+			ph[i].id = i + 1; //assign the id per 'i + 1' (to start the 1st id to 1)
+			ph[i].data = ms; //assign the data to each philo
+		}
+	}
+	return (ph);
 }
 
 void	ft_init_mutex(t_ms *ms)
@@ -55,25 +82,6 @@ void	ft_init_mutex(t_ms *ms)
 	pthread_mutex_init(&ms->r_fork, NULL);
 	pthread_mutex_init(&ms->l_fork, NULL);
 	pthread_mutex_init(&ms->msg, NULL);
-}
-
-t_ph	*ft_init_ph()
-{
-	static t_ph	*ph;
-
-	if (!ph)
-		ph = ft_calloc(1, sizeof(t_ph));
-	if (!ph)
-		ft_err_exit(ERR_MEM);
-	return (ph);
-}
-
-void	ft_get_ph_data(t_ms *ms, t_ph *ph, int i)
-{
-	ph[i].eating = false;
-	ph[i].eat_i = 0;
-	ph[i].id = i + 1; //assign the id per 'i + 1' (to start the 1st id to 1)
-	ph[i].data = ms; //assign the data to each philo
 }
 
 void	ft_destroy_mtx(t_ms *ms)
@@ -91,12 +99,8 @@ void	ft_philo(t_ms *ms)
 	t_ph		*ph;
 	int			i;
 
-	ph = ft_init_ph();
+	ph = ft_init_ph(ms);
 	ft_init_mutex(ms);
-	//while 'i' is less than philo_nb, attributes the philo id value and attributes the ms struct where each philo will have its own data
-	i = -1;
-	while (++i < ms->philo_nb)
-		ft_get_ph_data(ms, ph, i);
 	i = - 1;
 	while (++i < ms->philo_nb)
 		pthread_create(&t[i], NULL, &routine, &ph[i]); 
@@ -113,7 +117,7 @@ int main (int ac, char **av)
 
 	if(!ft_init_arg(ac, av))
 		return (1);
-	ms = ft_init_ms(av);
+	ms = ft_init_ms(ac, av);
 	print_debug(ac, ms);
 	ft_philo(ms);
 	// printf("\n🚧 "KYEL"Work In Progress 🚧\n"KRT);

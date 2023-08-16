@@ -28,11 +28,6 @@ to unlock the mutexes previously locked. At this point we make the philo sleep u
 
 */
 
-// void	ft_print_msg(int msg, t_ph *ph)
-// {
-	
-// }
-
 /*
 	1st action is to take one dork at a time 
 	each philo needs to lock the r_fork before the l_fork
@@ -46,56 +41,50 @@ to unlock the mutexes previously locked. At this point we make the philo sleep u
 */
 void	ft_eat(t_ph *ph) 
 {
+	// long long timer_eat;
+
+	// timer_eat = ph->data->tt_e + ft_timer();
 	//takes fork
 	pthread_mutex_lock(&ph->data->r_fork);
-	printf("id %d %s\n", ph->id, PICK_RF);
+	printf("%lld %d %s\n", ft_timer(), ph->id, PICK_RF);
 	pthread_mutex_lock(&ph->data->l_fork);
-	printf("id %d %s\n", ph->id, PICK_LF);
+	printf("%lld %d %s\n", ft_timer(), ph->id, PICK_LF);
 	
 	//update eating status
 	pthread_mutex_lock(&ph->data->m_lock);
 	ph->eating = true;
 
 	//print 'is eating' msg
-	pthread_mutex_lock(&ph->data->msg);
-	printf("id %d %s\n", ph->id, EAT_MSG);
-	pthread_mutex_unlock(&ph->data->msg);
+	print_msg(EATING, ph);
 
 	//Increment eat_i variable, to count how many times a philo has eaten
 	ph->eat_i++;
 
 	//TODO put a usleep here to represent the time to eat
-
+	usleep(ph->data->tt_e);
+	
 	//update eating status
 	ph->eating = false;
 	pthread_mutex_unlock(&ph->data->m_lock);
 
 	//drops fork
-	printf("id %d %s\n", ph->id, DROP_LF);
 	pthread_mutex_unlock(&ph->data->l_fork);
-	printf("id %d %s\n", ph->id, DROP_RF);
 	pthread_mutex_unlock(&ph->data->r_fork);
 }
 
 void	ft_think(t_ph *ph)
 {
-	// usleep(500); 
-	pthread_mutex_lock(&ph->data->msg);
-	printf("id %d %s\n", ph->id, THINK_MSG);
-	pthread_mutex_unlock(&ph->data->msg);
+	print_msg(THINKING, ph);
 }
 
 void	*routine(void *arg)
 {
-
 	t_ph	*ph;
-	// int loop = 1;
-	int times = -1; //nb of times an action needs to be done, in this example, this represent the nb of time a philo has thoght
 
 	ph = (t_ph *)arg;
 	if (ph->id % 2 == 0)
 		usleep(500);
-	while (++times < ph->data->meal_nb)
+	while (ph->eat_i < ph->data->meal_nb)
 	{
 		ft_think(ph);
 		ft_eat(ph);
@@ -107,9 +96,9 @@ void	*routine(void *arg)
 	**	I needed to put a usleep(10000) and a mutex lock/unlock
 	**	for the message to be correctly printed on the prompt
 	*/
-	usleep(10000);
+	usleep(1000);
 	pthread_mutex_lock(&ph->data->m_lock);
-	printf("id %d was called %d times\n", ph->id, times);
+	printf("id %d was called %d times\n", ph->id, ph->eat_i);
 	pthread_mutex_unlock(&ph->data->m_lock);
 	return (arg);
 }

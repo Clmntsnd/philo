@@ -3,11 +3,12 @@
 
 # include <unistd.h>
 # include <stdio.h>
-# include <stdlib.h>
+# include <pthread.h>
 # include <stdbool.h>
+# include <stdlib.h>
 # include <string.h>
 # include <sys/time.h>
-# include <pthread.h>
+# include <limits.h>
 
 /* ------------------ COLORS ------------------- */
 # define KNRM	"\x1B[m"
@@ -40,7 +41,7 @@
 # define EATING 2
 # define EAT_MSG "is eating"
 # define SLEEPING 3
-# define SLEE_MSG "is sleeping"
+# define SLEEP_MSG "is sleeping"
 # define PICK_RF "has taken the right fork"
 # define PICK_LF "has taken the left fork"
 # define DROP_RF "has dropped the right fork"
@@ -60,8 +61,6 @@ typedef struct s_ms
 	int				tt_e;		//time_to_eat
 	int				tt_s;		//time_to_sleep
 	int 			meal_nb;	//number_of_times_each_philosopher_must_eat
-	int				size;		//TODO seems obselete
-	int				i;			//TBD
 	int				status;		//while be assign to an int that will be defined above 
 	pthread_mutex_t	m_lock;		
 	pthread_mutex_t	msg;
@@ -78,18 +77,20 @@ typedef struct s_ph
 }	t_ph;
 
 /* -------------- Libft functions -------------- */
-long	ft_atol(const char *str);
-int		ft_atoi(const char *str);
-void	*ft_calloc(size_t count, size_t size);
-size_t	ft_strlen(const char *s);
-bool	ft_isdigit(const char *str);
-long	ft_atol(const char *str);
+long			ft_atol(const char *str);
+int				ft_atoi(const char *str);
+void			*ft_calloc(size_t count, size_t size);
+size_t			ft_strlen(const char *s);
+bool			ft_isdigit(const char *str);
+long			ft_atol(const char *str);
 
 /* ------------------ Parsing ------------------ */
 bool ft_init_arg(int ac, char **av);
 
-void	ft_err_exit(char *str);
-void	*routine(void *arg);
+void			ft_err_exit(char *str);
+void			*routine(void *arg);
+void			print_msg(int match, t_ph *ph);
+long long int	ft_timer(void);
 
 //TODO To remove
 void	print_debug(int ac, t_ms *ms);

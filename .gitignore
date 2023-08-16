@@ -1,6 +1,9 @@
 .DS_Store
 philo
 
+log.txt
+*.log
+
 # Prerequisites
 *.d
 
