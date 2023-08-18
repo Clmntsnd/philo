@@ -29,82 +29,100 @@
 **	• Again, philosophers should avoid dying!
 */
 
-t_ms	*ft_init_ms(int ac, char **av)
+void	*ft_get_ms(void *ptr)
 {
-	static t_ms	*ms;
+	static void	*ms = NULL;
 
-	if (!ms)
-	{
-		ms = ft_calloc(1, sizeof(t_ms));
-		if (!ms)
-			ft_err_exit(ERR_MEM);
-		ms->philo_nb = ft_atoi(av[1]);
-		ms->tt_d = ft_atoi(av[2]);
-		ms->tt_e = ft_atoi(av[3]);
-		ms->tt_s = ft_atoi(av[4]);
-		if (ac == 6)
-			ms->meal_nb = ft_atoi(av[5]);
-		else 
-			ms->meal_nb = INT_MAX;
-		ms->status = 0;
-	}
+	if (ptr)
+		ms = ptr;
 	return (ms);
 }
 
-t_ph	*ft_init_ph(t_ms *ms)
+void	ft_init_ms(t_ms *ms, int ac, char **av)
 {
-	static t_ph	*ph;
-	int 		i;
-
-	if (!ph) 
-	{ 
-		ph = ft_calloc(1, sizeof(t_ph));
-		if (!ph)
-			ft_err_exit(ERR_MEM);
-		//while 'i' is less than philo_nb, attributes the philo id value and attributes the ms struct where 
-		// each philo will have its own data
-		i = -1;
-		while (++i < ms->philo_nb)
-		{
-			ph[i].eating = false;
-			ph[i].eat_i = 0;
-			ph[i].id = i + 1; //assign the id per 'i + 1' (to start the 1st id to 1)
-			ph[i].data = ms; //assign the data to each philo
-		}
-	}
-	return (ph);
-}
-
-void	ft_init_mutex(t_ms *ms)
-{
-	//Init mutexes needed, to use it in the routine ft
+	ms->philo_nb = ft_atoi(av[1]);
+	ms->tt_d = ft_atoi(av[2]);
+	ms->tt_e = ft_atoi(av[3]);
+	ms->tt_s = ft_atoi(av[4]);
+	if (ac == 6)
+		ms->meal_nb = ft_atoi(av[5]);
+	else 
+		ms->meal_nb = INT_MAX;
+	ms->start_time = 0;
+	ms->is_dead = false;
 	pthread_mutex_init(&ms->m_lock, NULL);
-	pthread_mutex_init(&ms->r_fork, NULL);
-	pthread_mutex_init(&ms->l_fork, NULL);
 	pthread_mutex_init(&ms->msg, NULL);
+	ft_get_ms(ms);
 }
+
+void	ft_init_ph(t_ms *ms, t_ph *ph)
+{
+	int	i;
+
+	i = -1;
+	while (++i < ms->philo_nb)
+	{
+		ph[i].id = i;
+		ph[i].dead = false;
+		ph[i].left.i = -1;
+		ph[i].right = ft_calloc(1, sizeof(t_fork));
+		ph[i].right->i = -1;
+		ph[i].eat_i = 0;
+		ph[i].time_last_meal = 0;
+		ph[i].time_to_eat = 0;
+		ph[i].time_to_sleep = 0;
+		ph[i].data = ms;
+	}
+}
+
+// void	ft_init_mutex(t_ms *ms)
+// {
+// 	//Init mutexes needed, to use it in the routine ft
+// 	pthread_mutex_init(&ms->m_lock, NULL);
+// 	pthread_mutex_init(&ms->f_lock, NULL);
+// 	pthread_mutex_init(&ms->msg, NULL);
+// }
 
 void	ft_destroy_mtx(t_ms *ms)
 {
 	//Destroy the mutex ('clean/free' it)
 	pthread_mutex_destroy(&ms->m_lock);
-	pthread_mutex_destroy(&ms->r_fork);
-	pthread_mutex_destroy(&ms->l_fork);
 	pthread_mutex_destroy(&ms->msg);
 }
 
-void	ft_philo(t_ms *ms)
+void	ft_init_fork(t_ph *ph)
 {
-	pthread_t	t[ms->philo_nb];
-	t_ph		*ph;
+	int		i;
+
+	i = -1;
+	while (++i < ph->data->philo_nb - 1)
+	{
+		if (i < ph->data->philo_nb)
+			ph[i].right = &ph[i + 1].left;
+		if (i == ph->data->philo_nb - 1)
+			ph[i].right = &ph[0].left;
+		pthread_mutex_init(&ph[i].right->f_lock, NULL);
+	}
+}
+
+void	ft_philo(t_ms *ms, t_ph *ph)
+{
+	pthread_t	t[200];
 	int			i;
 
-	ph = ft_init_ph(ms);
-	ft_init_mutex(ms);
+	ft_init_fork(ph);
 	i = - 1;
+	pthread_mutex_lock(&ph->data->m_lock);
 	while (++i < ms->philo_nb)
-		pthread_create(&t[i], NULL, &routine, &ph[i]); 
-		//create all threads, each thread (t[i]) will execute the task 'routine' with each philo as the argument for the routine
+	{
+		// printf("ph->data->start_time = %d\n", ph->data->start_time);
+		ph[i].time_last_meal = ph->data->start_time;
+		// printf("ph[%d].time = %d\n", i, ph->data->start_time);
+		pthread_create(&t[i], NULL, &routine, &ph[i]);
+	}
+	ph->data->start_time = ft_timer();
+	pthread_mutex_unlock(&ph->data->m_lock);
+	// 	//create all threads, each thread (t[i]) will execute the task 'routine' with each philo as the argument for the routine
 	i = -1;
 	while (++i < ms->philo_nb)
 		pthread_join(t[i] , NULL); //join al threads
@@ -113,13 +131,19 @@ void	ft_philo(t_ms *ms)
 
 int main (int ac, char **av)
 { 	
-	t_ms	*ms = NULL;
+	// int		i;
+	t_ms	ms;
+	t_ph	ph[200];
 
 	if(!ft_init_arg(ac, av))
 		return (1);
-	ms = ft_init_ms(ac, av);
-	print_debug(ac, ms);
-	ft_philo(ms);
+	ft_init_ms(&ms, ac, av);
+	ft_init_ph(&ms, ph);
+	ft_philo(&ms, ph);
+	print_debug(ac, &ms, ph);
+	printf("ph->right addr : %p\n", ph->right);
+	// ft_free_null(ph->right);
+	// ft_free_null(ph);
 	// printf("\n🚧 "KYEL"Work In Progress 🚧\n"KRT);
 
 	return(0);

@@ -1,16 +1,33 @@
 #include "../includes/philo.h"
+
+void	*ft_free_null(void *ptr)
+{
+	if (ptr)
+		free(ptr);
+	return (NULL);
+}
+
 // Used to get a timer from the moment philo is starting
 // To save the exact moment and not modify it each time the function is called,
 // the usage of a static variable is helpfull (as in GNL)
-long long int	ft_timer(void)
+time_t	ft_timer(void)
 {
-	static struct timeval	start;
-	struct timeval			now;
+	struct timeval	start;
+	time_t			now;
 
 	gettimeofday(&start, NULL);
-	gettimeofday(&now, NULL);
-	return ((now.tv_sec * 1000 - start.tv_sec * 1000) + \
-	(now.tv_usec / 1000 - start.tv_usec / 1000));
+	now = start.tv_sec * 1000 + start.tv_usec / 1000;
+	return (now);
+}
+
+time_t	ft_t_stamp(t_ph *ph)
+{
+	time_t		time;
+	time_t		now;
+
+	now = ft_timer();
+	time = now - ph->data->start_time;
+	return (time);
 }
 
 void	print_msg(int match, t_ph *ph)
@@ -24,7 +41,7 @@ void	print_msg(int match, t_ph *ph)
 		str = EAT_MSG;
 	if (match == SLEEPING)
 		str = SLEEP_MSG;
-	printf("%lld %d %s\n", ft_timer(), ph->id, str);
+	printf("%ld %d %s\n", ft_timer(), ph->id, str);
 	pthread_mutex_unlock(&ph->data->msg);
 }
 
@@ -35,21 +52,48 @@ void	ft_err_exit(char *str)
 	exit(EXIT_FAILURE);
 }
 
-void	print_debug(int ac, t_ms *ms)
+void	print_debug(int ac, t_ms *ms, t_ph *ph)
 {
+	int i;
+
 	if (DEBUG)
 	{
-		printf(KITA KGRE"\n* --- DEBUG in ft_is_valid arg starts --- *\n");
+		printf(KITA KGRE"\n* --- DEBUG in ms starts --- *\n");
 		printf("philo_nb = %d\n", ms->philo_nb);
 		printf("tt_d = %d\n", ms->tt_d);
 		printf("tt_e = %d\n", ms->tt_e);
 		printf("tt_s = %d\n", ms->tt_s);
+		printf("meal_nb = %d\n", ms->meal_nb);
+		printf("start_time = %d\n", ms->start_time);
+		printf("is_dead = %d\n", ms->is_dead);
 		if (ac < 6)
-			printf("* --- DEBUG in ft_is_valid arg ends --- *\n\n"KRT);
+			printf("* --- DEBUG in ms ends --- *\n\n"KRT);
 		else
 		{
 			printf("meal_nb = %d\n", ms->meal_nb);
-			printf("* --- DEBUG in ft_is_valid arg ends --- *\n\n"KRT);
+			printf("* --- DEBUG in ms ends --- *\n\n"KRT);
 		}
-	}	
+		printf(KITA KGRE"\n* --- DEBUG in ph starts --- *\n");
+		i = -1;
+		while (++i < ms->philo_nb)
+		{
+			printf("ph[%d].[%d]\n", i, ph[i].id);
+			printf("ph[%d].dead = %d\n", i, ph[i].dead);
+			printf("ph[%d].left.%d = %d\n", i, i, ph[i].left.i);
+			// printf("ph[%d].right.%d = %d\n", i, i, ph[i].right->i);
+			printf("ph[%d].eat_i = %d\n", i, ph[i].eat_i);
+			printf("ph[%d].time_last_meal = %ld\n", i, ph[i].time_last_meal);
+			printf("ph[%d].time_to_eat = %ld\n", i, ph[i].time_to_eat);
+			printf("ph[%d].time_to_sleep = %ld\n", i, ph[i].time_to_sleep);
+			printf("ph[%d].start_time = %d\n\n", i, ph[i].data->start_time);
+			
+			// printf(ph[i].left.i = -1;
+			// printf(ph[i].eat_i = 0;
+			// printf(ph[i].time_last_meal = 0;
+			// printf(ph[i].time_to_eat = 0;
+			// printf(ph[i].time_to_sleep = 0;
+			// printf(ph[i].data = ms;
+		}
+		printf(KITA KGRE"\n* --- DEBUG in ph ends --- *\n");
+	}
 }

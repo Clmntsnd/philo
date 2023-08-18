@@ -28,6 +28,41 @@ to unlock the mutexes previously locked. At this point we make the philo sleep u
 
 */
 
+bool	ft_take_fork(t_ph *ph)
+{
+	pthread_mutex_lock(&ph->data->msg);
+	printf("ph->left.i = %d\n", ph->left.i);
+	printf("ph->right.i = %d\n", ph->right->i);
+	pthread_mutex_unlock(&ph->data->msg);
+	//takes fork
+	pthread_mutex_lock(&ph->left.f_lock);
+	pthread_mutex_lock(&ph->right->f_lock);
+	if(ph->left.i == -1 && ph->right->i == -1)
+	{
+		ph->left.i = ph->id;
+		ph->right->i = ph->id;
+		printf("%ld %d %s\n", ft_timer(), ph->id, PICK_LF);
+		printf("%ld %d %s\n", ft_timer(), ph->id, PICK_RF);
+		// pthread_mutex_unlock(&ph->right->f_lock);
+		// pthread_mutex_unlock(&ph->left.f_lock);
+	}
+	pthread_mutex_unlock(&ph->right->f_lock);
+	pthread_mutex_unlock(&ph->left.f_lock);
+	return (true);
+}
+
+void	ft_drop_fork(t_ph *ph)
+{
+	pthread_mutex_lock(&ph->left.f_lock);
+	pthread_mutex_lock(&ph->right->f_lock);
+	ph->left.i = -1;
+	ph->right->i = -1;
+	printf("%ld %d %s\n", ft_timer(), ph->id, DROP_LF);
+	printf("%ld %d %s\n", ft_timer(), ph->id, DROP_RF);
+	pthread_mutex_unlock(&ph->right->f_lock);
+	pthread_mutex_unlock(&ph->left.f_lock);
+}
+
 /*
 	1st action is to take one dork at a time 
 	each philo needs to lock the r_fork before the l_fork
@@ -41,40 +76,31 @@ to unlock the mutexes previously locked. At this point we make the philo sleep u
 */
 void	ft_eat(t_ph *ph) 
 {
-	// long long timer_eat;
-
-	// timer_eat = ph->data->tt_e + ft_timer();
-	//takes fork
-	pthread_mutex_lock(&ph->data->r_fork);
-	printf("%lld %d %s\n", ft_timer(), ph->id, PICK_RF);
-	pthread_mutex_lock(&ph->data->l_fork);
-	printf("%lld %d %s\n", ft_timer(), ph->id, PICK_LF);
-	
+	ph->time_to_eat = ft_t_stamp(ph) + ph->data->tt_e;
+	ph->time_last_meal = ft_t_stamp(ph) + ph->data->tt_d;
 	//update eating status
 	pthread_mutex_lock(&ph->data->m_lock);
-	ph->eating = true;
 
 	//print 'is eating' msg
+	pthread_mutex_lock(&ph->data->msg);
 	print_msg(EATING, ph);
+	pthread_mutex_unlock(&ph->data->msg);
 
 	//Increment eat_i variable, to count how many times a philo has eaten
 	ph->eat_i++;
 
 	//TODO put a usleep here to represent the time to eat
 	usleep(ph->data->tt_e);
-	
-	//update eating status
-	ph->eating = false;
 	pthread_mutex_unlock(&ph->data->m_lock);
 
 	//drops fork
-	pthread_mutex_unlock(&ph->data->l_fork);
-	pthread_mutex_unlock(&ph->data->r_fork);
 }
 
 void	ft_think(t_ph *ph)
 {
 	print_msg(THINKING, ph);
+	ft_take_fork(ph);
+	ft_drop_fork(ph);
 }
 
 void	*routine(void *arg)
@@ -82,12 +108,15 @@ void	*routine(void *arg)
 	t_ph	*ph;
 
 	ph = (t_ph *)arg;
+	ph->time_last_meal = ph->data->tt_d;
 	if (ph->id % 2 == 0)
 		usleep(500);
 	while (ph->eat_i < ph->data->meal_nb)
 	{
 		ft_think(ph);
-		ft_eat(ph);
+		// ft_eat(ph);
+		ph->eat_i++;
+
 	}
 		//TODO add a ft_eat
 		//TODO add a ft_sleep
