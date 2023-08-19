@@ -109,6 +109,8 @@ void		*ft_free_null(void *ptr);
 void		ft_free_all(t_ms *ms);
 void		ft_free_ms(t_ms *ms);
 void		*routine(void *arg);
+void		ft_usleep(time_t time);
+
 
 //TODO To remove
 void	print_debug(int ac, t_ms *ms, t_ph **ph);
