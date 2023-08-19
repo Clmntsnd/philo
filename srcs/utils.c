@@ -97,7 +97,8 @@ void	print_debug(int ac, t_ms *ms, t_ph **ph)
 			printf("ph[%d]->data.tt_d = %d\n", i, ph[i]->data.tt_d);
 			printf("ph[%d]->data.tt_e = %d\n", i, ph[i]->data.tt_e);
 			printf("ph[%d]->data.tt_s = %d\n", i, ph[i]->data.tt_s);
-			printf("ph[%d]->data.is_dead = %d\n\n", i, ph[i]->data.dead);
+			printf("ph[%d]->data.is_dead = %d\n", i, ph[i]->data.dead);
+			printf("ph[%d]->data.meal_nb = %d\n\n", i, ph[i]->data.meal_nb);
 		}
 		printf(KITA KGRE"* --- DEBUG in ph ends --- *\n"KRT);
 	}
