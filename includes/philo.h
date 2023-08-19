@@ -64,13 +64,13 @@ typedef struct s_ms
 	int 			meal_nb;	//number_of_times_each_philosopher_must_eat
 	bool			dead;
 	time_t			start_time;	
-	pthread_mutex_t	*m_lock;		
-	pthread_mutex_t	*msg;
+	pthread_mutex_t	m_lock;		
+	pthread_mutex_t	msg;
 }	t_ms;
 
 typedef struct s_fork
 {
-	pthread_mutex_t	*f_lock;
+	pthread_mutex_t	f_lock;
 	int				use;
 }	t_fork;
 

@@ -31,18 +31,18 @@
 
 void	ft_free_ms(t_ms *ms)
 {
-	if (ms->m_lock)
-		ms->m_lock = ft_free_null(ms->m_lock);
-	if (ms->msg)
-		ms->msg = ft_free_null(ms->msg);
+	// if (ms->m_lock)
+	// 	ms->m_lock = ft_free_null(ms->m_lock);
+	// if (ms->msg)
+	// 	ms->msg = ft_free_null(ms->msg);
 	if (ms)
 		ms = ft_free_null(ms);
 }
 
 void	ft_destroy_mutex(t_ms *ms)
 {
-	pthread_mutex_destroy(ms->m_lock);
-	pthread_mutex_destroy(ms->msg);
+	pthread_mutex_destroy(&ms->m_lock);
+	pthread_mutex_destroy(&ms->msg);
 }
 
 
