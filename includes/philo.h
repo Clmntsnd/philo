@@ -62,29 +62,26 @@ typedef struct s_ms
 	int				tt_e;		//time_to_eat
 	int				tt_s;		//time_to_sleep
 	int 			meal_nb;	//number_of_times_each_philosopher_must_eat
-	int				start_time;	//start of the simulation
-	bool			is_dead;	
-	pthread_mutex_t	m_lock;		
-	pthread_mutex_t	msg;
+	bool			dead;
+	time_t			start_time;	
+	pthread_mutex_t	*m_lock;		
+	pthread_mutex_t	*msg;
 }	t_ms;
 
 typedef struct s_fork
 {
-	pthread_mutex_t	f_lock;
-	int				i;
+	pthread_mutex_t	*f_lock;
+	int				use;
 }	t_fork;
 
 typedef struct s_ph
 {
 	int		id;
 	int		eat_i;	//eat counter for each philo
-	bool	dead;	//is a philo eating or not?
-	t_fork	left;
+	t_ms	data;
+	t_fork	*left;
 	t_fork	*right;
-	t_ms	*data;
 	time_t	time_last_meal;
-	time_t	time_to_eat;
-	time_t	time_to_sleep;
 }	t_ph;
 
 /* -------------- Libft functions -------------- */
@@ -94,20 +91,19 @@ void	*ft_calloc(size_t count, size_t size);
 size_t	ft_strlen(const char *s);
 bool	ft_isdigit(const char *str);
 long	ft_atol(const char *str);
+void	ft_memcpy(void *src, void *dest, size_t size);
 
 /* ------------------ Parsing ------------------ */
 bool ft_init_arg(int ac, char **av);
 
 void	ft_err_exit(char *str);
-void	*routine(void *arg);
 void	print_msg(int match, t_ph *ph);
 time_t	ft_timer(void);
 time_t	ft_t_stamp(t_ph *ph);
 void	*ft_free_null(void *ptr);
-
+void	ft_free_all(t_ms *ms);
 
 //TODO To remove
-// void	print_debug(int ac, t_ms *ms);
-void	print_debug(int ac, t_ms *ms, t_ph *ph);
+void	print_debug(int ac, t_ms *ms);
 
 #endif

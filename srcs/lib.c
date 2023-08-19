@@ -69,3 +69,11 @@ long	ft_atol(const char *str)
 	}
 	return (res * neg);
 }
+
+void	ft_memcpy(void *src, void *dest, size_t size)
+{
+	if (!src || !dest)
+		return ;
+	while (size--)
+		((unsigned char *)dest)[size] = ((unsigned char *)src)[size];
+}

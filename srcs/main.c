@@ -29,16 +29,17 @@
 **	• Again, philosophers should avoid dying!
 */
 
-void	*ft_get_ms(void *ptr)
+void	ft_free_ms(t_ms *ms)
 {
-	static void	*ms = NULL;
-
-	if (ptr)
-		ms = ptr;
-	return (ms);
+	if(ms->m_lock)
+		ms->m_lock = ft_free_null(ms->m_lock);
+	if(ms->msg)
+		ms->msg = ft_free_null(ms->msg);
+	if(ms)
+		ms = ft_free_null(ms);
 }
 
-void	ft_init_ms(t_ms *ms, int ac, char **av)
+void	ft_set_data(int ac, char **av, t_ms *ms)
 {
 	ms->philo_nb = ft_atoi(av[1]);
 	ms->tt_d = ft_atoi(av[2]);
@@ -48,103 +49,47 @@ void	ft_init_ms(t_ms *ms, int ac, char **av)
 		ms->meal_nb = ft_atoi(av[5]);
 	else 
 		ms->meal_nb = INT_MAX;
+	ms->dead = false;
 	ms->start_time = 0;
-	ms->is_dead = false;
-	pthread_mutex_init(&ms->m_lock, NULL);
-	pthread_mutex_init(&ms->msg, NULL);
-	ft_get_ms(ms);
 }
 
-void	ft_init_ph(t_ms *ms, t_ph *ph)
+t_ms *ft_init_ms(int ac, char **av)
 {
-	int	i;
+	static t_ms	*ms;
 
-	i = -1;
-	while (++i < ms->philo_nb)
+	if (!ms)
 	{
-		ph[i].id = i;
-		ph[i].dead = false;
-		ph[i].left.i = -1;
-		ph[i].right = ft_calloc(1, sizeof(t_fork));
-		ph[i].right->i = -1;
-		ph[i].eat_i = 0;
-		ph[i].time_last_meal = 0;
-		ph[i].time_to_eat = 0;
-		ph[i].time_to_sleep = 0;
-		ph[i].data = ms;
+		ms = ft_calloc(1, sizeof(t_ms));
+		ms->m_lock = ft_calloc(1, sizeof(pthread_mutex_t));
+		ms->msg = ft_calloc(1, sizeof(pthread_mutex_t));
+		if (!ms || !ms->m_lock || !ms->msg)
+		{
+			ft_free_ms(ms);
+			ft_err_exit(ERR_MEM);
+		}
+		ft_set_data(ac, av, ms);	
+		pthread_mutex_init(ms->m_lock, NULL);
+		pthread_mutex_init(ms->msg, NULL);
 	}
+	return(ms);
 }
 
-// void	ft_init_mutex(t_ms *ms)
-// {
-// 	//Init mutexes needed, to use it in the routine ft
-// 	pthread_mutex_init(&ms->m_lock, NULL);
-// 	pthread_mutex_init(&ms->f_lock, NULL);
-// 	pthread_mutex_init(&ms->msg, NULL);
-// }
-
-void	ft_destroy_mtx(t_ms *ms)
+void	ft_destroy_mutex(t_ms *ms)
 {
-	//Destroy the mutex ('clean/free' it)
-	pthread_mutex_destroy(&ms->m_lock);
-	pthread_mutex_destroy(&ms->msg);
-}
-
-void	ft_init_fork(t_ph *ph)
-{
-	int		i;
-
-	i = -1;
-	while (++i < ph->data->philo_nb - 1)
-	{
-		if (i < ph->data->philo_nb)
-			ph[i].right = &ph[i + 1].left;
-		if (i == ph->data->philo_nb - 1)
-			ph[i].right = &ph[0].left;
-		pthread_mutex_init(&ph[i].right->f_lock, NULL);
-	}
-}
-
-void	ft_philo(t_ms *ms, t_ph *ph)
-{
-	pthread_t	t[200];
-	int			i;
-
-	ft_init_fork(ph);
-	i = - 1;
-	pthread_mutex_lock(&ph->data->m_lock);
-	while (++i < ms->philo_nb)
-	{
-		// printf("ph->data->start_time = %d\n", ph->data->start_time);
-		ph[i].time_last_meal = ph->data->start_time;
-		// printf("ph[%d].time = %d\n", i, ph->data->start_time);
-		pthread_create(&t[i], NULL, &routine, &ph[i]);
-	}
-	ph->data->start_time = ft_timer();
-	pthread_mutex_unlock(&ph->data->m_lock);
-	// 	//create all threads, each thread (t[i]) will execute the task 'routine' with each philo as the argument for the routine
-	i = -1;
-	while (++i < ms->philo_nb)
-		pthread_join(t[i] , NULL); //join al threads
-	ft_destroy_mtx(ms);
+	pthread_mutex_destroy(ms->m_lock);
+	pthread_mutex_destroy(ms->msg);
 }
 
 int main (int ac, char **av)
 { 	
-	// int		i;
-	t_ms	ms;
-	t_ph	ph[200];
+	t_ms		*ms;
+
 
 	if(!ft_init_arg(ac, av))
 		return (1);
-	ft_init_ms(&ms, ac, av);
-	ft_init_ph(&ms, ph);
-	ft_philo(&ms, ph);
-	print_debug(ac, &ms, ph);
-	printf("ph->right addr : %p\n", ph->right);
-	// ft_free_null(ph->right);
-	// ft_free_null(ph);
-	// printf("\n🚧 "KYEL"Work In Progress 🚧\n"KRT);
-
+	ms = ft_init_ms(ac, av);
+	print_debug(ac, ms);
+	ft_destroy_mutex(ms);
+	ft_free_all(ms);
 	return(0);
 }

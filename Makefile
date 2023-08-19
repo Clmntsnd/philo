@@ -30,9 +30,9 @@ NAME		=	philo
 
 # -- Compilation Flag -- #
 CC			=	gcc
-CFLAGS		=	-Wall -Wextra -Werror -g -pthread
+# CFLAGS		=	-Wall -Wextra -Werror -g -pthread
 # CFLAGS	=	-Wall -Wextra -Werror -g -Wunreachable-code -fsanitize=address
-# CFLAGS	=	-Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS	=	-Wall -Wextra -Werror -g -fsanitize=address
 
 # -- Remove -- #
 RM			=	rm -rf
@@ -43,7 +43,6 @@ SRCS_LST	= 	main.c \
 				lib.c \
 				parsing.c \
 				utils.c \
-				task.c
 
 SRCS		=	$(addprefix $(SRCS_DIR), $(SRCS_LST))
 
