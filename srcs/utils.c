@@ -9,13 +9,13 @@ void	*ft_free_null(void *ptr)
 
 void	ft_free_all(t_ms *ms)
 {
+	// int 	i;
 	if(ms->m_lock)
 		ms->m_lock = ft_free_null(ms->m_lock);
 	if(ms->msg)
 		ms->msg = ft_free_null(ms->msg);
 	if(ms)
 		ms = ft_free_null(ms);
-		
 	//TODO put future struct here
 }
 
@@ -64,9 +64,9 @@ void	ft_err_exit(char *str)
 	exit(EXIT_FAILURE);
 }
 
-void	print_debug(int ac, t_ms *ms)
+void	print_debug(int ac, t_ms *ms, t_ph **ph)
 {
-	// int i;
+	int i;
 
 	if (DEBUG)
 	{
@@ -75,7 +75,6 @@ void	print_debug(int ac, t_ms *ms)
 		printf("tt_d = %d\n", ms->tt_d);
 		printf("tt_e = %d\n", ms->tt_e);
 		printf("tt_s = %d\n", ms->tt_s);
-		printf("meal_nb = %d\n", ms->meal_nb);
 		printf("start_time = %ld\n", ms->start_time);
 		printf("is_dead = %d\n", ms->dead);
 		if (ac < 6)
@@ -85,23 +84,21 @@ void	print_debug(int ac, t_ms *ms)
 			printf("meal_nb = %d\n", ms->meal_nb);
 			printf("* --- DEBUG in ms ends --- *\n\n"KRT);
 		}
-		// printf(KITA KGRE"\n* --- DEBUG in ph starts --- *\n");
-		// i = -1;
-		// while (++i < ms->philo_nb)
-		// {
-		// 	printf("ph[%d].[%d]\n", i, ph[i].id);
-		// 	// printf("ph[%d].right.%d = %d\n", i, i, ph[i].right->i);
-		// 	printf("ph[%d].eat_i = %d\n", i, ph[i].eat_i);
-		// 	printf("ph[%d].time_last_meal = %ld\n", i, ph[i].time_last_meal);
-		// 	printf("ph[%d].start_time = %ld\n\n", i, ph[i].data.start_time);
-			
-		// 	// printf(ph[i].left.i = -1;
-		// 	// printf(ph[i].eat_i = 0;
-		// 	// printf(ph[i].time_last_meal = 0;
-		// 	// printf(ph[i].time_to_eat = 0;
-		// 	// printf(ph[i].time_to_sleep = 0;
-		// 	// printf(ph[i].data = ms;
-		// }
-		// printf(KITA KGRE"\n* --- DEBUG in ph ends --- *\n");
+		printf(KITA KGRE"\n* --- DEBUG in ph starts --- *\n");
+		i = -1;
+		while (++i < ms->philo_nb)
+		{
+			printf("ph[%d]->id = %d\n", i, ph[i]->id);
+			// printf("ph[%d].right.%d = %d\n", i, i, ph[i].right->i);
+			printf("ph[%d]->eat_i = %d\n", i, ph[i]->eat_i);
+			printf("ph[%d]->time_last_meal = %ld\n", i, ph[i]->time_last_meal);
+			printf("ph[%d]->data.start_time = %ld\n", i, ph[i]->data.start_time);
+			printf("ph[%d]->data.philo_nb = %d\n", i, ph[i]->data.philo_nb);
+			printf("ph[%d]->data.tt_d = %d\n", i, ph[i]->data.tt_d);
+			printf("ph[%d]->data.tt_e = %d\n", i, ph[i]->data.tt_e);
+			printf("ph[%d]->data.tt_s = %d\n", i, ph[i]->data.tt_s);
+			printf("ph[%d]->data.is_dead = %d\n\n", i, ph[i]->data.dead);
+		}
+		printf(KITA KGRE"* --- DEBUG in ph ends --- *\n"KRT);
 	}
 }

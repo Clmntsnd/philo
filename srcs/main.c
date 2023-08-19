@@ -31,47 +31,12 @@
 
 void	ft_free_ms(t_ms *ms)
 {
-	if(ms->m_lock)
+	if (ms->m_lock)
 		ms->m_lock = ft_free_null(ms->m_lock);
-	if(ms->msg)
+	if (ms->msg)
 		ms->msg = ft_free_null(ms->msg);
-	if(ms)
+	if (ms)
 		ms = ft_free_null(ms);
-}
-
-void	ft_set_data(int ac, char **av, t_ms *ms)
-{
-	ms->philo_nb = ft_atoi(av[1]);
-	ms->tt_d = ft_atoi(av[2]);
-	ms->tt_e = ft_atoi(av[3]);
-	ms->tt_s = ft_atoi(av[4]);
-	if (ac == 6)
-		ms->meal_nb = ft_atoi(av[5]);
-	else 
-		ms->meal_nb = INT_MAX;
-	ms->dead = false;
-	ms->start_time = 0;
-}
-
-t_ms *ft_init_ms(int ac, char **av)
-{
-	static t_ms	*ms;
-
-	if (!ms)
-	{
-		ms = ft_calloc(1, sizeof(t_ms));
-		ms->m_lock = ft_calloc(1, sizeof(pthread_mutex_t));
-		ms->msg = ft_calloc(1, sizeof(pthread_mutex_t));
-		if (!ms || !ms->m_lock || !ms->msg)
-		{
-			ft_free_ms(ms);
-			ft_err_exit(ERR_MEM);
-		}
-		ft_set_data(ac, av, ms);	
-		pthread_mutex_init(ms->m_lock, NULL);
-		pthread_mutex_init(ms->msg, NULL);
-	}
-	return(ms);
 }
 
 void	ft_destroy_mutex(t_ms *ms)
@@ -82,13 +47,14 @@ void	ft_destroy_mutex(t_ms *ms)
 
 int main (int ac, char **av)
 { 	
-	t_ms		*ms;
-
+	t_ms	*ms;
+	t_ph	**ph;
 
 	if(!ft_init_arg(ac, av))
 		return (1);
 	ms = ft_init_ms(ac, av);
-	print_debug(ac, ms);
+	ph = ft_init_ph(ms);
+	print_debug(ac, ms, ph);
 	ft_destroy_mutex(ms);
 	ft_free_all(ms);
 	return(0);
