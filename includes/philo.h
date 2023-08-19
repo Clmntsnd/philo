@@ -99,7 +99,7 @@ bool ft_init_arg(int ac, char **av);
 /* ------------------ Init ------------------ */
 t_ms		*ft_init_ms(int ac, char **av);
 t_ph		**ft_init_ph(t_ms *ms);
-pthread_t	**ft_init_th(t_ms *ms, pthread_t **th);
+pthread_t	**ft_init_th(t_ms *ms);
 
 void		ft_err_exit(char *str);
 void		print_msg(int match, t_ph *ph);
@@ -108,6 +108,7 @@ time_t		ft_t_stamp(t_ph *ph);
 void		*ft_free_null(void *ptr);
 void		ft_free_all(t_ms *ms);
 void		ft_free_ms(t_ms *ms);
+void		*routine(void *arg);
 
 //TODO To remove
 void	print_debug(int ac, t_ms *ms, t_ph **ph);

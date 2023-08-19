@@ -49,15 +49,16 @@ void	ft_destroy_mutex(t_ms *ms)
 void	ft_philo(t_ms *ms, t_ph **ph)
 {
 	pthread_t	**th;
-	// int 		i;
-	(void)ph;
+	int 		i;
 
-	th = NULL;
-	ft_init_th(ms, th);
-	// i = -1;
-	// while(++i < ms->philo_nb)
-	// 	pthread_create(th[i], NULL, &ft_routine, ph[i]);
 
+	th = ft_init_th(ms);
+	i = 0;
+	while(i < ms->philo_nb)
+	{
+		pthread_create(th[i], NULL, &routine, ph[i]);
+		i++;
+	}
 }
 
 int main (int ac, char **av)
@@ -69,7 +70,7 @@ int main (int ac, char **av)
 		return (1);
 	ms = ft_init_ms(ac, av);
 	ph = ft_init_ph(ms);
-	print_debug(ac, ms, ph);
+	// print_debug(ac, ms, ph);
 	ft_philo(ms, ph);
 	ft_destroy_mutex(ms);
 	ft_free_all(ms);

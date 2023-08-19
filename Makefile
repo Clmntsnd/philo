@@ -44,6 +44,7 @@ SRCS_LST	= 	main.c \
 				parsing.c \
 				utils.c \
 				init.c \
+				routine.c
 
 SRCS		=	$(addprefix $(SRCS_DIR), $(SRCS_LST))
 

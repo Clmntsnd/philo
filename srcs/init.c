@@ -86,8 +86,9 @@ t_ph	**ft_init_ph(t_ms *ms)
 	return(ph);
 }
 
-pthread_t	**ft_init_th(t_ms *ms, pthread_t **th)
+pthread_t	**ft_init_th(t_ms *ms)
 {
+	static pthread_t	**th;
 	int	i;
 
 	th = ft_calloc(ms->philo_nb + 1, sizeof(pthread_t *));
