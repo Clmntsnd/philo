@@ -23,7 +23,7 @@ bool	ft_think(t_ph *ph)
 	// pthread_mutex_lock(ph->print_msg);
 	print_msg(THINKING, ph);
 	// pthread_mutex_unlock(ph->print_msg);
-	usleep(1000);
+	usleep(100);
 	while(ft_fork_used(ph) == false)
 	{
 		if(ph->time_last_meal < ft_timer())
@@ -95,8 +95,8 @@ bool	ft_sleep(t_ph *ph)
 	time_t	time_to_sleep;
 
 	time_to_sleep = ph->data.tt_s + ft_timer();
-	// if(ph->data.dead == true)
-	// 	return (true);
+	if(ph->data.dead == true)
+		return (true);
 	print_msg(SLEEPING, ph);
 	while (ft_timer() < time_to_sleep)
 	{
@@ -129,8 +129,9 @@ void	*routine(void *arg)
 		if (ft_eat(ph))
 			break;
 		ft_drop_fork(ph);
-		ft_sleep(ph);
 		ph->eat_i++;
+		if (ft_sleep(ph))
+			break ;
 	}
 	//TODO Close all mutex here
 	return (arg);
