@@ -32,10 +32,10 @@ bool	ft_think(t_ph *ph)
 	// printf("fork_used entering\n");
 	// printf("ph->data.msg = %p\n", ph->data.msg);
 
-	// pthread_mutex_lock(&ph->data.msg);
+	pthread_mutex_lock(&ph->data.msg);
 	print_msg(THINKING, ph);
-	// pthread_mutex_unlock(&ph->data.msg);
-	// usleep(1000);
+	pthread_mutex_unlock(&ph->data.msg);
+	usleep(1000);
 	// while(!ft_fork_used(ph))
 	// 	ft_usleep(100);
 	// ft_fork_used(ph);
