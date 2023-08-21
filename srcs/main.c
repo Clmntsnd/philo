@@ -29,50 +29,50 @@
 **	• Again, philosophers should avoid dying!
 */
 
-void	ft_free_ms(t_ms *ms)
-{
-	// if (ms->m_lock)
-	// 	ms->m_lock = ft_free_null(ms->m_lock);
-	// if (ms->msg)
-	// 	ms->msg = ft_free_null(ms->msg);
-	if (ms)
-		ms = ft_free_null(ms);
-}
+// void	ft_free_ms(t_ms *ms)
+// {
+// 	// if (ms->m_lock)
+// 	// 	ms->m_lock = ft_free_null(ms->m_lock);
+// 	// if (ms->msg)
+// 	// 	ms->msg = ft_free_null(ms->msg);
+// 	if (ms)
+// 		ms = ft_free_null(ms);
+// }
 
-void	ft_destroy_mutex(t_ms *ms)
-{
-	pthread_mutex_destroy(&ms->m_lock);
-	pthread_mutex_destroy(&ms->msg);
-}
-
-
-void	ft_philo(t_ms *ms, t_ph **ph)
-{
-	pthread_t	**th;
-	int 		i;
+// void	ft_destroy_mutex(t_ms *ms)
+// {
+// 	pthread_mutex_destroy(ms->m_lock);
+// 	pthread_mutex_destroy(ms->msg);
+// }
 
 
-	th = ft_init_th(ms);
-	i = 0;
-	while(i < ms->philo_nb)
-	{
-		pthread_create(th[i], NULL, &routine, ph[i]);
-		i++;
-	}
-}
+// void	ft_philo(t_ms *ms, t_ph **ph)
+// {
+// 	pthread_t	**th;
+// 	int 		i;
+
+// 	th = NULL;
+// 	th = ft_init_th(ms);
+// 	i = -1;
+// 	printf("ms->philo_nd = %d\n", ms->philo_nb);
+// 	while(++i < ms->philo_nb)
+// 		if(pthread_create(th[i], NULL, &routine, ph[i]) != 0)
+// 			printf("Issue with pthread create\n");
+// 	printf("allo\n");
+// }
 
 int main (int ac, char **av)
 { 	
-	t_ms	*ms;
-	t_ph	**ph;
+	t_ms	ms;
+	t_ph	ph[200];
 
 	if(!ft_init_arg(ac, av))
 		return (1);
-	ms = ft_init_ms(ac, av);
-	ph = ft_init_ph(ms);
-	// print_debug(ac, ms, ph);
-	ft_philo(ms, ph);
-	ft_destroy_mutex(ms);
-	ft_free_all(ms);
+	ft_init_ms(&ms, ac, av);
+	ft_init_ph(&ms, ph);
+	print_debug(ac, &ms, ph);
+	// ft_philo(ms, ph);
+	// ft_destroy_mutex(ms);
+	// ft_free_all(ms);
 	return(0);
 }

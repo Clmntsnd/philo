@@ -62,44 +62,50 @@ typedef struct s_ms
 	int				tt_e;		//time_to_eat
 	int				tt_s;		//time_to_sleep
 	int 			meal_nb;	//number_of_times_each_philosopher_must_eat
-	bool			dead;
 	time_t			start_time;	
+	bool			dead;
 	pthread_mutex_t	m_lock;		
 	pthread_mutex_t	msg;
+	pthread_mutex_t	f_lock;
 }	t_ms;
 
 typedef struct s_fork
 {
 	pthread_mutex_t	f_lock;
-	int				use;
+	int				id;
 }	t_fork;
 
 typedef struct s_ph
 {
-	int		id;
-	int		eat_i;	//eat counter for each philo
-	t_ms	data;
-	t_fork	*left;
-	t_fork	*right;
-	time_t	time_last_meal;
+	int					id;
+	int					eat_i;	//eat counter for each philo
+	t_fork				left;
+	t_fork				*right;
+	t_ms				data;
+	time_t				time_last_meal;
+	pthread_mutex_t		*m_lock;
+	pthread_mutex_t		*print_msg;
+	pthread_mutex_t		*f_lock;
 }	t_ph;
 
 /* -------------- Libft functions -------------- */
-long	ft_atol(const char *str);
-int		ft_atoi(const char *str);
-void	*ft_calloc(size_t count, size_t size);
-size_t	ft_strlen(const char *s);
-bool	ft_isdigit(const char *str);
-long	ft_atol(const char *str);
-void	ft_memcpy(void *src, void *dest, size_t size);
+long		ft_atol(const char *str);
+int			ft_atoi(const char *str);
+void		*ft_calloc(size_t count, size_t size);
+size_t		ft_strlen(const char *s);
+bool		ft_isdigit(const char *str);
+long		ft_atol(const char *str);
+void		ft_memcpy(void *src, void *dest, size_t size);
 
 /* ------------------ Parsing ------------------ */
-bool ft_init_arg(int ac, char **av);
+bool 		ft_init_arg(int ac, char **av);
 
 /* ------------------ Init ------------------ */
-t_ms		*ft_init_ms(int ac, char **av);
-t_ph		**ft_init_ph(t_ms *ms);
-pthread_t	**ft_init_th(t_ms *ms);
+void		ft_init_ms(t_ms *ms, int ac, char **av);
+void		ft_init_ph(t_ms *ms, t_ph *ph);
+// pthread_t	**ft_init_th(t_ms *ms);
+// void		ft_init_th(t_ms *ms, pthread_t **th);
+
 
 void		ft_err_exit(char *str);
 void		print_msg(int match, t_ph *ph);
@@ -110,9 +116,11 @@ void		ft_free_all(t_ms *ms);
 void		ft_free_ms(t_ms *ms);
 void		*routine(void *arg);
 void		ft_usleep(time_t time);
+void		*ft_get_ms(void *ptr);
+
 
 
 //TODO To remove
-void	print_debug(int ac, t_ms *ms, t_ph **ph);
+void	print_debug(int ac, t_ms *ms, t_ph *ph);
 
 #endif
