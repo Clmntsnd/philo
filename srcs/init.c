@@ -45,7 +45,7 @@ void	ft_init_ph(t_ms *ms, t_ph *ph)
 	i = -1;
 	while(++i < ms->philo_nb)
 	{
-		ph[i].id = i;
+		ph[i].id = i + 1;
 		ph[i].eat_i = 0;
 		ph[i].left.used = false;
 		ft_memcpy(ms, &ph[i].data, sizeof(t_ms));
