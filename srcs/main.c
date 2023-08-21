@@ -17,7 +17,8 @@
 **	LOGS
 **	About the logs of your program:
 **	• Any state change of a philosopher must be formatted as follows:
-**		◦ timestamp_in_ms X has taken a fork ◦ timestamp_in_ms X is eating
+**		◦ timestamp_in_ms X has taken a fork 
+		◦ timestamp_in_ms X is eating
 **		◦ timestamp_in_ms X is sleeping
 **		◦ timestamp_in_ms X is thinking
 **		◦ timestamp_in_ms X died
@@ -28,16 +29,6 @@
 **	• A message announcing a philosopher died should be displayed no more than 10 ms after the actual death of the philosopher.
 **	• Again, philosophers should avoid dying!
 */
-
-// void	ft_free_ms(t_ms *ms)
-// {
-// 	// if (ms->m_lock)
-// 	// 	ms->m_lock = ft_free_null(ms->m_lock);
-// 	// if (ms->msg)
-// 	// 	ms->msg = ft_free_null(ms->msg);
-// 	if (ms)
-// 		ms = ft_free_null(ms);
-// }
 
 void	ft_destroy_mutex(t_ms *ms, t_ph *ph)
 {
@@ -80,7 +71,5 @@ int main (int ac, char **av)
 	print_debug(ac, &ms, ph);
 	ft_philo(&ms, ph);
 	ft_destroy_mutex(&ms, ph);
-
-	// ft_free_all(ms);
 	return(0);
 }

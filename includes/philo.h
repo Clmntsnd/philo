@@ -42,11 +42,11 @@
 # define EAT_MSG "is eating"
 # define SLEEPING 3
 # define SLEEP_MSG "is sleeping"
-# define DEAD 3
+# define DEAD 4
 # define DEAD_MSG "died"
 
-# define PICK_RF "has taken the right fork"
-# define PICK_LF "has taken the left fork"
+# define PICK_RF "has taken a fork"
+# define PICK_LF "has taken a fork"
 # define DROP_RF "has dropped the right fork"
 # define DROP_LF "has dropped the left fork"
 
