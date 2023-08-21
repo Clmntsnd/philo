@@ -42,6 +42,9 @@
 # define EAT_MSG "is eating"
 # define SLEEPING 3
 # define SLEEP_MSG "is sleeping"
+# define DEAD 3
+# define DEAD_MSG "died"
+
 # define PICK_RF "has taken the right fork"
 # define PICK_LF "has taken the left fork"
 # define DROP_RF "has dropped the right fork"
@@ -49,7 +52,7 @@
 
 //TODO To remove
 /* ---------------- DEBUG & TEST ---------------- */
-# define DEBUG	1
+# define DEBUG	0
 # define NB		3
 
 /* ------------------ STRUCTS ------------------ */
@@ -72,7 +75,7 @@ typedef struct s_ms
 typedef struct s_fork
 {
 	pthread_mutex_t	f_lock;
-	int				id;
+	bool			used;
 }	t_fork;
 
 typedef struct s_ph

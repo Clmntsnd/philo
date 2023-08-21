@@ -29,6 +29,7 @@ void	*ft_get_ms(void *ptr)
 }
 
 // Used to get a timer from the moment philo is starting
+//
 // To save the exact moment and not modify it each time the function is called,
 // the usage of a static variable is helpfull (as in GNL)
 time_t	ft_timer(void)
@@ -78,6 +79,8 @@ void	print_msg(int match, t_ph *ph)
 		str = EAT_MSG;
 	if (match == SLEEPING)
 		str = SLEEP_MSG;
+	if (match == DEAD)
+		str = DEAD_MSG;
 	printf("%ld %d %s\n", ft_timer(), ph->id, str);
 	pthread_mutex_unlock(&ph->data.msg);
 }

@@ -47,7 +47,7 @@ void	ft_init_ph(t_ms *ms, t_ph *ph)
 	{
 		ph[i].id = i;
 		ph[i].eat_i = 0;
-		ph[i].left.id = -1;
+		ph[i].left.used = false;
 		ft_memcpy(ms, &ph[i].data, sizeof(t_ms));
 		ph[i].m_lock = &ms->m_lock;
 		ph[i].print_msg = &ms->msg;
