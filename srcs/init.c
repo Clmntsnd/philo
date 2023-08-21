@@ -55,31 +55,3 @@ void	ft_init_ph(t_ms *ms, t_ph *ph)
 	}
 	ft_init_fork(ph, ph->data.philo_nb);
 }
-
-// pthread_t	**ft_init_th(t_ms *ms)
-// {
-// 	pthread_t	**th;
-// 	// pthread_t	**tmp;
-// 	int	i;
-
-// 	th = NULL;
-// 	if (!th)
-// 	{
-// 		th = ft_calloc(ms->philo_nb + 1, sizeof(pthread_t));
-// 		if(!th){
-// 			printf("1 st alloc \n");
-// 			ft_err_exit(ERR_MEM);
-// 		}
-
-// 		i = -1;
-// 		while (++i < ms->philo_nb)
-// 		{
-// 			th[i] = ft_calloc(1, sizeof(pthread_t));
-// 			if (!th[i]){
-// 				printf("2 nd alloc \n");
-// 				ft_err_exit(ERR_MEM);
-// 			}
-// 		}
-// 	}
-// 	return (th);
-// }
