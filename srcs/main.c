@@ -89,5 +89,6 @@ int	main(int ac, char **av)
 	print_debug(ac, &ms, ph);
 	ft_philo(&ms, ph);
 	ft_destroy_mutex(&ms, ph);
+	//TODO check data_races 
 	return (0);
 }

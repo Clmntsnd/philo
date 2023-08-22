@@ -20,27 +20,31 @@ bool	ft_fork_used(t_ph *ph)
 	return (used);
 }
 
-void	ft_monitor_th(t_ph *ph)
+int	ft_monitor_th(time_t time, t_ph *ph)
 {
 	t_ms *ms;
 
 	ms = ft_get_ms(NULL);
-	pthread_mutex_lock(ph->print_msg);
-	if (ms->dead == false)
-		print_msg(DEAD, ph);
-	ms->dead = true;
+	if(time < ft_timer())
+	{
+		pthread_mutex_lock(ph->print_msg);
+		if (ms->dead == false)
+			print_msg(DEAD, ph);
+		ms->dead = true;
+		pthread_mutex_unlock(ph->print_msg);
+		return (1);
+	}
+	usleep(100);
+	return (0);
 }
 
-bool	ft_think(t_ph *ph)
+int	ft_think(t_ph *ph)
 {
 	print_msg(THINKING, ph);
 	usleep(500);
 	while(ft_fork_used(ph) == false)
-	{
-		if(ph->time_last_meal < ft_timer())
-			ft_monitor_th(ph);
-		usleep(100);
-	}
+		if (ft_monitor_th(ph->time_last_meal, ph) == 1)
+			return (1);
 	pthread_mutex_lock(&ph->left.f_lock);
 	pthread_mutex_lock(&ph->right->f_lock);
 	if (ph->data.dead == false)
@@ -63,7 +67,7 @@ void	ft_drop_fork(t_ph *ph)
 	pthread_mutex_unlock(&ph->data.m_lock);
 }
 
-bool	ft_eat(t_ph *ph)
+int	ft_eat(t_ph *ph)
 {
 	time_t time_to_eat;
 
@@ -72,33 +76,28 @@ bool	ft_eat(t_ph *ph)
 	pthread_mutex_lock(&ph->data.m_lock);
 	print_msg(EATING, ph);
 	while (ft_timer() < time_to_eat)
-	{
-		if(ph->time_last_meal < ft_timer())
-			ft_monitor_th(ph);
-		usleep(100);
-	}
+		if (ft_monitor_th(ph->time_last_meal, ph) == 1)
+			return (1);
 	pthread_mutex_unlock(&ph->data.m_lock);
 	ft_drop_fork(ph);
-	return (false);
+	return (0);
 }
 
 
-bool	ft_sleep(t_ph *ph)
+int	ft_sleep(t_ph *ph)
 {
+	t_ms	*ms;
 	time_t	time_to_sleep;
 
+	ms = ft_get_ms(NULL);
 	time_to_sleep = ph->data.tt_s + ft_timer();
-	// if(ph->data.dead == true)
-	// 	return (true);
+	if(ms->dead == true)
+		return (1);
 	print_msg(SLEEPING, ph);
 	while (ft_timer() < time_to_sleep)
-	{
-		if(ph->time_last_meal < ft_timer())
-			ft_monitor_th(ph);
-		usleep(100);
-	}
-	printf("allo\n");
-	return(false); 
+		if (ft_monitor_th(ph->time_last_meal, ph) == 1)
+			return (1);
+	return(0); 
 }
 
 void	*routine(void *arg)
@@ -111,17 +110,14 @@ void	*routine(void *arg)
 		usleep(500);
 	while(ph->eat_i < ph->data.meal_nb)
 	{
-		if (ft_think(ph))
-			break;
-		if (ft_eat(ph))
-			break;
+		if (ft_think(ph) == 1)
+			break ;
+		if (ft_eat(ph) == 1)
+			break ;
 		ph->eat_i++;
-		if (ft_sleep(ph))
+		if (ft_sleep(ph) == 1)
 			break ;
 	}
-	//TODO to remove
-	printf("Salut"); 
-	//TODO Close all mutex here
 	pthread_mutex_unlock(&ph->left.f_lock);
 	pthread_mutex_unlock(&ph->right->f_lock);
 	return (arg);

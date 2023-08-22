@@ -57,7 +57,7 @@ bool	print_msg(int match, t_ph *ph)
 		printf("%ld %d %s\n", ft_timer(), ph->id, str);
 		error = true;
 	}
-	// pthread_mutex_unlock(&ph->data.msg);
+	//TODO add a variable to check if everyone has eaten ine this exemple : ./philo 4 410 60 800 1 
 	return (error);
 }
 
