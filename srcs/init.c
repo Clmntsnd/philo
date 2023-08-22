@@ -8,7 +8,7 @@ void	ft_ms_data(int ac, char **av, t_ms *ms)
 	ms->tt_s = ft_atoi(av[4]);
 	if (ac == 6)
 		ms->meal_nb = ft_atoi(av[5]);
-	else 
+	else
 		ms->meal_nb = INT_MAX;
 	ms->dead = false;
 	ms->start_time = 0;
@@ -23,18 +23,18 @@ void	ft_init_ms(t_ms *ms, int ac, char **av)
 	ft_get_ms(ms);
 }
 
-void	ft_init_fork(t_ph *ph, int	nb)
+void	ft_init_fork(t_ph *ph, int nb)
 {
-	int i;
+	int	i;
 
 	i = -1;
-	while(++i < nb)
+	while (++i < nb)
 	{
-		if(i < nb)
+		if (i < nb)
 			ph[i].right = &ph[i + 1].left;
-		if(i == nb - 1)
+		if (i == nb - 1)
 			ph[i].right = &ph[0].left;
-		pthread_mutex_init(&ph[i].left.f_lock, NULL);		
+		pthread_mutex_init(&ph[i].left.f_lock, NULL);
 	}
 }
 
@@ -43,7 +43,7 @@ void	ft_init_ph(t_ms *ms, t_ph *ph)
 	int	i;
 
 	i = -1;
-	while(++i < ms->philo_nb)
+	while (++i < ms->philo_nb)
 	{
 		ph[i].id = i + 1;
 		ph[i].eat_i = 0;

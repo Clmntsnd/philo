@@ -7,18 +7,6 @@ void	*ft_free_null(void *ptr)
 	return (NULL);
 }
 
-void	ft_free_all(t_ms *ms)
-{
-	// int 	i;
-	// if(ms->m_lock)
-	// 	ms->m_lock = ft_free_null(ms->m_lock);
-	// if(ms->msg)
-	// 	ms->msg = ft_free_null(ms->msg);
-	if(ms)
-		ms = ft_free_null(ms);
-	//TODO put future struct here
-}
-
 void	*ft_get_ms(void *ptr)
 {
 	static void	*ms = NULL;
@@ -42,30 +30,6 @@ time_t	ft_timer(void)
 	gettimeofday(&now, NULL);
 	return ((now.tv_sec * 1000 - start.tv_sec * 1000) + \
 	(now.tv_usec / 1000 - start.tv_usec / 1000));
-}
-
-time_t	ft_t_stamp(t_ph *ph)
-{
-	time_t		time;
-	time_t		now;
-
-	now = ft_timer();
-	time = now - ph->data.start_time;
-	return (time);
-}
-
-void	ft_usleep(time_t time)
-{
-	time_t	time_now;
-
-	time_now = ft_timer();
-	usleep((time - 10) * 1000);
-	while (42)
-	{
-		if (ft_timer() - time_now >= (time))
-			break ;
-		usleep(50);
-	}
 }
 
 void	print_msg(int match, t_ph *ph)

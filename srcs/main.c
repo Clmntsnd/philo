@@ -38,38 +38,37 @@ void	ft_destroy_mutex(t_ms *ms, t_ph *ph)
 	pthread_mutex_destroy(&ph->left.f_lock);
 }
 
-
 void	ft_philo(t_ms *ms, t_ph *ph)
 {
 	pthread_t	th[200];
-	int 		i;
+	int			i;
 
 	i = -1;
 	printf("ms->philo_nbr = %d\n", ms->philo_nb);
 	pthread_mutex_lock(ph->m_lock);
-	while(++i < ms->philo_nb)
-		if(pthread_create(&th[i], NULL, &routine, &ph[i]) != 0)
+	while (++i < ms->philo_nb)
+		if (pthread_create(&th[i], NULL, &routine, &ph[i]) != 0)
 			printf("Issue with pthread create\n");
 	pthread_mutex_unlock(ph->m_lock);
 	i = -1;
 	pthread_mutex_lock(ph->m_lock);
-	while(++i < ms->philo_nb)
-		if(pthread_join(th[i], NULL) != 0)
+	while (++i < ms->philo_nb)
+		if (pthread_join(th[i], NULL) != 0)
 			printf("Issue with pthread join\n");
 	pthread_mutex_unlock(ph->m_lock);
 }
 
-int main (int ac, char **av)
-{ 	
+int	main(int ac, char **av)
+{
 	t_ms	ms;
 	t_ph	ph[200];
 
-	if(!ft_init_arg(ac, av))
+	if (!ft_init_arg(ac, av))
 		return (1);
 	ft_init_ms(&ms, ac, av);
 	ft_init_ph(&ms, ph);
 	print_debug(ac, &ms, ph);
 	ft_philo(&ms, ph);
 	ft_destroy_mutex(&ms, ph);
-	return(0);
+	return (0);
 }

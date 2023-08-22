@@ -28,8 +28,8 @@
 /* ---------------- Error Msgs ---------------- */
 # define ERR_ARG1	"❌ Oops ! Not enough arguments ❌"
 # define ERR_ARG2	"❌ Oops ! Too many arguments ❌"
-# define ERR_DIGIT	"❌ Oops ! Error with an argument (only digits above 0 are accepted) ❌"
-# define ERR_PH_NB	"❌ Oops ! Error with argv[1] (0 < philosophers numbers < 200) ❌"
+# define ERR_DIGIT	"❌ Oops ! Error with an arg (digits > 0 accepted only) ❌"
+# define ERR_PH_NB	"❌ Oops ! Error with argv[1] (0 < philo nbr < 200) ❌"
 # define ERR_INT	"❌ Oops ! Error with an argument (not a valid integer) ❌"
 # define ERR_TIME	"❌ Oops ! Error with an argument (invalid time (< 60 ms)) ❌"
 # define ERR_NB_EAT	"❌ Oops ! Error with an argument (invalid times to eat) ❌"
@@ -64,7 +64,7 @@ typedef struct s_ms
 	int				tt_d;		//time_to_die
 	int				tt_e;		//time_to_eat
 	int				tt_s;		//time_to_sleep
-	int 			meal_nb;	//number_of_times_each_philosopher_must_eat
+	int				meal_nb;	//number_of_times_each_philosopher_must_eat
 	time_t			start_time;	
 	bool			dead;
 	pthread_mutex_t	m_lock;		
@@ -91,6 +91,23 @@ typedef struct s_ph
 	pthread_mutex_t		*f_lock;
 }	t_ph;
 
+/* ------------------ Parsing ------------------ */
+bool		ft_init_arg(int ac, char **av);
+
+/* -------------------- Init ------------------- */
+void		ft_init_ms(t_ms *ms, int ac, char **av);
+void		ft_init_ph(t_ms *ms, t_ph *ph);
+
+/* ------------------ Routine ------------------ */
+void		*routine(void *arg);
+
+/* -------------------- Utils ------------------ */
+void		ft_err_exit(char *str);
+void		print_msg(int match, t_ph *ph);
+time_t		ft_timer(void);
+void		*ft_free_null(void *ptr);
+void		*ft_get_ms(void *ptr);
+
 /* -------------- Libft functions -------------- */
 long		ft_atol(const char *str);
 int			ft_atoi(const char *str);
@@ -99,28 +116,6 @@ size_t		ft_strlen(const char *s);
 bool		ft_isdigit(const char *str);
 long		ft_atol(const char *str);
 void		ft_memcpy(void *src, void *dest, size_t size);
-
-/* ------------------ Parsing ------------------ */
-bool 		ft_init_arg(int ac, char **av);
-
-/* ------------------ Init ------------------ */
-void		ft_init_ms(t_ms *ms, int ac, char **av);
-void		ft_init_ph(t_ms *ms, t_ph *ph);
-// pthread_t	**ft_init_th(t_ms *ms);
-// void		ft_init_th(t_ms *ms, pthread_t **th);
-
-
-void		ft_err_exit(char *str);
-void		print_msg(int match, t_ph *ph);
-time_t		ft_timer(void);
-time_t		ft_t_stamp(t_ph *ph);
-void		*ft_free_null(void *ptr);
-void		ft_free_all(t_ms *ms);
-void		ft_free_ms(t_ms *ms);
-void		*routine(void *arg);
-void		ft_usleep(time_t time);
-void		*ft_get_ms(void *ptr);
-
 
 
 //TODO To remove
