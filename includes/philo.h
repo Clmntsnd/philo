@@ -102,10 +102,11 @@ void		ft_init_ph(t_ms *ms, t_ph *ph);
 
 /* ------------------ Routine ------------------ */
 void		*routine(void *arg);
+void		*routine_solo(void *arg);
 
 /* -------------------- Utils ------------------ */
-void		ft_err_exit(char *str);
-void		print_msg(int match, t_ph *ph);
+// void		print_msg(int match, t_ph *ph);
+bool		print_msg(int match, t_ph *ph);
 time_t		ft_timer(void);
 void		*ft_free_null(void *ptr);
 void		*ft_get_ms(void *ptr);

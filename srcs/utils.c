@@ -32,11 +32,12 @@ time_t	ft_timer(void)
 	(now.tv_usec / 1000 - start.tv_usec / 1000));
 }
 
-void	print_msg(int match, t_ph *ph)
+bool	print_msg(int match, t_ph *ph)
 {
-	char *str;
+	char 		*str;
+	bool		error;
 
-	pthread_mutex_lock(&ph->data.msg);
+	// pthread_mutex_lock(&ph->data.msg);
 	if (match == THINKING)
 		str = THINK_MSG;
 	if (match == EATING)
@@ -45,15 +46,19 @@ void	print_msg(int match, t_ph *ph)
 		str = SLEEP_MSG;
 	if (match == DEAD)
 		str = DEAD_MSG;
-	printf("%ld %d %s\n", ft_timer(), ph->id, str);
-	pthread_mutex_unlock(&ph->data.msg);
-}
-
-void	ft_err_exit(char *str)
-{
-	printf("%s%s%s\n", KRED, str, KRT);
-	//TODO put free fts here to avoid leaks
-	exit(EXIT_FAILURE);
+	if (ph->data.dead == false)
+	{
+		printf("%ld %d %s\n", ft_timer(), ph->id, str);
+		pthread_mutex_unlock(&ph->data.msg);
+		error = false;
+	}
+	if (ph->data.dead == true)
+	{
+		printf("%ld %d %s\n", ft_timer(), ph->id, str);
+		error = true;
+	}
+	// pthread_mutex_unlock(&ph->data.msg);
+	return (error);
 }
 
 void	print_debug(int ac, t_ms *ms, t_ph *ph)
