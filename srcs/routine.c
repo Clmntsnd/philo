@@ -4,7 +4,8 @@ bool	ft_fork_used(t_ph *ph)
 {
 	bool	used;
 
-	pthread_mutex_lock(ph->f_lock);
+	pthread_mutex_lock(&ph->left.f_lock);
+	pthread_mutex_lock(&ph->right->f_lock);
 	//TODO put an if, when philo_nb == 1, to return false
 	if (ph->left.used == false && ph->right->used == false)
 	{
@@ -14,7 +15,8 @@ bool	ft_fork_used(t_ph *ph)
 	}
 	else
 		used = false;
-	pthread_mutex_unlock(ph->f_lock);
+	pthread_mutex_unlock(&ph->left.f_lock);
+	pthread_mutex_unlock(&ph->right->f_lock);
 	return (used);
 }
 
@@ -23,7 +25,7 @@ bool	ft_think(t_ph *ph)
 	// pthread_mutex_lock(ph->print_msg);
 	print_msg(THINKING, ph);
 	// pthread_mutex_unlock(ph->print_msg);
-	usleep(100);
+	usleep(1000);
 	while(ft_fork_used(ph) == false)
 	{
 		if(ph->time_last_meal < ft_timer())
@@ -38,7 +40,8 @@ bool	ft_think(t_ph *ph)
 		usleep(100);
 	}
 	//this mutex will be unlicked only after eating (i.e to unlock when dropping forks)
-	pthread_mutex_lock(ph->f_lock);
+	pthread_mutex_lock(&ph->left.f_lock);
+	pthread_mutex_lock(&ph->right->f_lock);
 	if (ph->data.dead == false)
 	{
 		pthread_mutex_lock(ph->print_msg);
@@ -80,7 +83,9 @@ bool	ft_eat(t_ph *ph)
 
 void	ft_drop_fork(t_ph *ph)
 {
-	pthread_mutex_unlock(ph->f_lock);
+	// pthread_mutex_unlock(ph->f_lock);
+	pthread_mutex_unlock(&ph->left.f_lock);
+	pthread_mutex_unlock(&ph->right->f_lock);
 	// printf("%ld %d %s\n", ft_timer(), ph->id, DROP_LF);
 	// printf("%ld %d %s\n", ft_timer(), ph->id, DROP_RF);
 
@@ -121,7 +126,7 @@ void	*routine(void *arg)
 	// printf("routine starts\n");
 	ph->time_last_meal = ph->data.tt_d;
 	if (!(ph->id & 1))
-		usleep(ph->data.tt_e);
+		usleep(500);
 	while(ph->eat_i < ph->data.meal_nb)
 	{
 		if (ft_think(ph))
