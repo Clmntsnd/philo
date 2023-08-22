@@ -34,6 +34,8 @@
 # define ERR_TIME	"❌ Oops ! Error with an argument (invalid time (< 60 ms)) ❌"
 # define ERR_NB_EAT	"❌ Oops ! Error with an argument (invalid times to eat) ❌"
 # define ERR_MEM	"❌ Memory allocation failed ❌"
+# define PTHC		"❌ pthread_create error ❌"
+# define PTHJ		"❌ pthread_join error ❌"
 
 /* ---------------- Status Msg ---------------- */
 # define THINKING 1

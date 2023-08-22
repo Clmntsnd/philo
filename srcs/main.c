@@ -44,17 +44,16 @@ void	ft_philo(t_ms *ms, t_ph *ph)
 	int			i;
 
 	i = -1;
-	printf("ms->philo_nbr = %d\n", ms->philo_nb);
 	pthread_mutex_lock(ph->m_lock);
 	while (++i < ms->philo_nb)
 		if (pthread_create(&th[i], NULL, &routine, &ph[i]) != 0)
-			printf("Issue with pthread create\n");
+			printf("%s%s%s\n", KRED, PTHC, KRT);
 	pthread_mutex_unlock(ph->m_lock);
 	i = -1;
 	pthread_mutex_lock(ph->m_lock);
 	while (++i < ms->philo_nb)
 		if (pthread_join(th[i], NULL) != 0)
-			printf("Issue with pthread join\n");
+			printf("%s%s%s\n", KRED, PTHJ, KRT);
 	pthread_mutex_unlock(ph->m_lock);
 }
 
