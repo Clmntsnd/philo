@@ -15,8 +15,8 @@ bool	ft_fork_used(t_ph *ph)
 	}
 	else
 		used = false;
-	pthread_mutex_unlock(&ph->left.f_lock);
 	pthread_mutex_unlock(&ph->right->f_lock);
+	pthread_mutex_unlock(&ph->left.f_lock);
 	return (used);
 }
 
@@ -59,12 +59,14 @@ int	ft_think(t_ph *ph)
 
 void	ft_drop_fork(t_ph *ph)
 {
-	pthread_mutex_unlock(&ph->left.f_lock);
-	pthread_mutex_unlock(&ph->right->f_lock);
+	pthread_mutex_lock(&ph->left.f_lock);
+	pthread_mutex_lock(&ph->right->f_lock);
 	pthread_mutex_unlock(&ph->data.m_lock);
 	ph->left.used = false;
 	ph->right->used = false;
 	pthread_mutex_unlock(&ph->data.m_lock);
+	pthread_mutex_unlock(&ph->right->f_lock);
+	pthread_mutex_unlock(&ph->left.f_lock);
 }
 
 int	ft_eat(t_ph *ph)
@@ -79,6 +81,8 @@ int	ft_eat(t_ph *ph)
 		if (ft_monitor_th(ph->time_last_meal, ph) == 1)
 			return (1);
 	pthread_mutex_unlock(&ph->data.m_lock);
+	pthread_mutex_unlock(&ph->right->f_lock);
+	pthread_mutex_unlock(&ph->left.f_lock);
 	ft_drop_fork(ph);
 	return (0);
 }
