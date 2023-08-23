@@ -106,6 +106,7 @@ void		*routine_solo(void *arg);
 
 /* -------------------- Utils ------------------ */
 // void		print_msg(int match, t_ph *ph);
+bool		ft_check_dead();
 bool		print_msg(int match, t_ph *ph);
 time_t		ft_timer(void);
 void		*ft_free_null(void *ptr);

@@ -30,9 +30,9 @@ NAME		=	philo
 
 # -- Compilation Flag -- #
 CC			=	gcc
-# CFLAGS		=	-Wall -Wextra -Werror -g -pthread
+CFLAGS		=	-Wall -Wextra -Werror -g -pthread
 # CFLAGS	=	-Wall -Wextra -Werror -g -Wunreachable-code -fsanitize=address
-CFLAGS	=	-Wall -Wextra -Werror -g -pthread -fsanitize=thread
+# CFLAGS	=	-Wall -Wextra -Werror -g -pthread -fsanitize=thread
 
 # -- Remove -- #
 RM			=	rm -rf

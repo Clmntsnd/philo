@@ -32,6 +32,17 @@ time_t	ft_timer(void)
 	(now.tv_usec / 1000 - start.tv_usec / 1000));
 }
 
+bool	ft_check_dead()
+{
+	t_ms	*ms;
+
+	ms = ft_get_ms(NULL);
+	pthread_mutex_lock(&ms->m_lock);
+	if (ms->dead == true)
+		return(pthread_mutex_unlock(&ms->m_lock), true);
+	return(pthread_mutex_unlock(&ms->m_lock), false);
+}
+
 bool	print_msg(int match, t_ph *ph)
 {
 	char 	*str;
@@ -39,7 +50,6 @@ bool	print_msg(int match, t_ph *ph)
 	t_ms	*ms;
 
 	ms = ft_get_ms(NULL);
-	// pthread_mutex_lock(&ph->data.msg);
 	if (match == THINKING)
 		str = THINK_MSG;
 	if (match == EATING)
@@ -49,21 +59,21 @@ bool	print_msg(int match, t_ph *ph)
 	if (match == DEAD)
 		str = DEAD_MSG;
 	// pthread_mutex_lock(&ms->m_lock);
-	if (ms->dead == false)
+	if (ft_check_dead() == false)
 	{
+		// pthread_mutex_unlock(&ms->m_lock);
 		// pthread_mutex_lock(&ph->data.msg);
 		printf("%ld %d %s\n", ft_timer(), ph->id, str);
 		// pthread_mutex_unlock(&ph->data.msg);
 		error = false;
 	}
-	if (ms->dead == true)
+	else
 	{
-		// pthread_mutex_lock(&ph->data.msg);
-		printf("%ld %d %s\n", ft_timer(), ph->id, str);
-		// pthread_mutex_unlock(&ph->data.msg);
+		// pthread_mutex_unlock(&ms->m_lock);
+		// printf("%ld %d %s\n", ft_timer(), ph->id, DEAD_MSG);
 		error = true;
 	}
-	// pthread_mutex_unlock(&ms->m_lock);
+
 	//TODO add a variable to check if everyone has eaten ine this exemple : ./philo 4 410 60 800 1 
 	return (error);
 }

@@ -27,11 +27,15 @@ int	ft_monitor_th(time_t time, t_ph *ph)
 	ms = ft_get_ms(NULL);
 	if(time < ft_timer())
 	{
+		pthread_mutex_lock(&ms->m_lock);
 		pthread_mutex_lock(ph->print_msg);
 		if (ms->dead == false)
-			print_msg(DEAD, ph);
-		ms->dead = true;
+		{
+			printf("%ld %d %s\n", ft_timer(), ph->id, DEAD_MSG);
+			ms->dead = true;
+		}
 		pthread_mutex_unlock(ph->print_msg);
+		pthread_mutex_unlock(&ms->m_lock);
 		return (1);
 	}
 	usleep(100);
@@ -47,7 +51,7 @@ int	ft_think(t_ph *ph)
 			return (1);
 	pthread_mutex_lock(&ph->left.f_lock);
 	pthread_mutex_lock(&ph->right->f_lock);
-	if (ph->data.dead == false)
+	if (ft_check_dead() == false)
 	{
 		pthread_mutex_lock(ph->print_msg);
 		printf("%ld %d %s\n", ft_timer(), ph->id, PICK_LF);
@@ -59,8 +63,6 @@ int	ft_think(t_ph *ph)
 
 void	ft_drop_fork(t_ph *ph)
 {
-	pthread_mutex_lock(&ph->left.f_lock);
-	pthread_mutex_lock(&ph->right->f_lock);
 	pthread_mutex_unlock(&ph->data.m_lock);
 	ph->left.used = false;
 	ph->right->used = false;
@@ -81,8 +83,6 @@ int	ft_eat(t_ph *ph)
 		if (ft_monitor_th(ph->time_last_meal, ph) == 1)
 			return (1);
 	pthread_mutex_unlock(&ph->data.m_lock);
-	pthread_mutex_unlock(&ph->right->f_lock);
-	pthread_mutex_unlock(&ph->left.f_lock);
 	ft_drop_fork(ph);
 	return (0);
 }
@@ -95,7 +95,7 @@ int	ft_sleep(t_ph *ph)
 
 	ms = ft_get_ms(NULL);
 	time_to_sleep = ph->data.tt_s + ft_timer();
-	if(ms->dead == true)
+	if(ft_check_dead() == true)
 		return (1);
 	print_msg(SLEEPING, ph);
 	while (ft_timer() < time_to_sleep)
