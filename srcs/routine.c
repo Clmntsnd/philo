@@ -90,10 +90,8 @@ int	ft_eat(t_ph *ph)
 
 int	ft_sleep(t_ph *ph)
 {
-	t_ms	*ms;
 	time_t	time_to_sleep;
 
-	ms = ft_get_ms(NULL);
 	time_to_sleep = ph->data.tt_s + ft_timer();
 	if(ft_check_dead() == true)
 		return (1);
@@ -122,7 +120,5 @@ void	*routine(void *arg)
 		if (ft_sleep(ph) == 1)
 			break ;
 	}
-	pthread_mutex_unlock(&ph->left.f_lock);
-	pthread_mutex_unlock(&ph->right->f_lock);
 	return (arg);
 }
