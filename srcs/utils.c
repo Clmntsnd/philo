@@ -47,19 +47,18 @@ bool	ft_check_dead()
 	return(dead);
 }
 
-bool	print_msg(int match, t_ph *ph)
+bool	print_msg(char *str, t_ph *ph)
 {
-	char 	*str;
 	bool	error;
 
-	if (match == THINKING)
-		str = THINK_MSG;
-	if (match == EATING)
-		str = EAT_MSG;
-	if (match == SLEEPING)
-		str = SLEEP_MSG;
-	if (match == DEAD)
-		str = DEAD_MSG;
+	// if (match == THINKING)
+	// 	str = THINK_MSG;
+	// if (match == EATING)
+	// 	str = EAT_MSG;
+	// if (match == SLEEPING)
+	// 	str = SLEEP_MSG;
+	// if (match == DEAD)
+	// 	str = DEAD_MSG;
 	if (ft_check_dead() == false)
 	{
 		printf("%ld %d %s\n", ft_timer(), ph->id, str);

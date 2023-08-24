@@ -5,7 +5,7 @@
 **	Your(s) program(s) should take the following arguments: 
 **	◦ number_of_philosophers: The number of philosophers and also the number of forks.
 **	◦ time_to_die (in milliseconds): If a philosopher didn’t start eating time_to_die milliseconds since the beginning of their 
-**									last meal or the beginning of the sim- ulation, they die.
+**									last meal or the beginning of the simulation, they die.
 **	◦ time_to_eat (in milliseconds): The time it takes for a philosopher to eat. During that time, they will need to hold two forks.
 **	◦ time_to_sleep (in milliseconds): The time a philosopher will spend sleeping.
 **	◦ number_of_times_each_philosopher_must_eat (optional argument): If all philosophers have eaten at least number_of_times_each_philosopher_must_eat times,
@@ -30,53 +30,6 @@
 **	• Again, philosophers should avoid dying!
 */
 
-void	ft_destroy_mutex(t_ms *ms, t_ph *ph)
-{
-	pthread_mutex_destroy(&ms->m_lock);
-	pthread_mutex_destroy(&ms->msg);
-	pthread_mutex_destroy(&ms->f_lock);
-	pthread_mutex_destroy(&ph->left.f_lock);
-}
-
-void	*routine_solo(void *arg)
-{
-	t_ph	*ph;
-
-	ph = (t_ph *)arg;
-	printf("%ld %d %s\n", ft_timer(), ph->id, PICK_LF);
-	usleep(ph->data.tt_d * 1000);
-	printf("%ld %d %s\n", ft_timer(), ph->id, DEAD_MSG);
-	return(0);
-}
-
-bool	ft_philo(t_ms *ms, t_ph *ph)
-{
-	pthread_t	th[200];
-	int			i;
-
-	if (ph->data.philo_nb == 1)
-	{
-		if (pthread_create(&th[0], NULL, &routine_solo, &ph[0]) != 0)
-			return (printf("%s%s%s\n", KRED, PTHC, KRT), false);
-		if (pthread_join(th[0], NULL) != 0)
-			return (printf("%s%s%s\n", KRED, PTHJ, KRT), false);
-	}
-	else
-	{
-		i = -1;
-		pthread_mutex_lock(ph->m_lock);
-		while (++i < ms->philo_nb)
-			if (pthread_create(&th[i], NULL, &routine, &ph[i]) != 0)
-				return (printf("%s%s%s\n", KRED, PTHC, KRT), false);
-		pthread_mutex_unlock(ph->m_lock);
-		i = -1;
-		while (++i < ms->philo_nb)
-			if (pthread_join(th[i], NULL) != 0)
-				return (printf("%s%s%s\n", KRED, PTHJ, KRT), false);
-	}
-	return (true);
-}
-
 int	main(int ac, char **av)
 {
 	t_ms	ms;
@@ -86,6 +39,7 @@ int	main(int ac, char **av)
 		return (1);
 	ft_init_ms(&ms, ac, av);
 	ft_init_ph(&ms, ph);
+	//TODO remove print debug
 	print_debug(ac, &ms, ph);
 	ft_philo(&ms, ph);
 	ft_destroy_mutex(&ms, ph);

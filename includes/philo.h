@@ -38,24 +38,19 @@
 # define PTHJ		"❌ pthread_join error ❌"
 
 /* ---------------- Status Msg ---------------- */
-# define THINKING 1
-# define THINK_MSG "is thinking"
-# define EATING 2
-# define EAT_MSG "is eating"
-# define SLEEPING 3
-# define SLEEP_MSG "is sleeping"
-# define DEAD 4
-# define DEAD_MSG "died"
+# define THINKING "is thinking"
+# define EATING "is eating"
+# define SLEEPING "is sleeping"
+# define DEAD "died"
 
 # define PICK_RF "has taken a fork"
 # define PICK_LF "has taken a fork"
 # define DROP_RF "has dropped the right fork"
-# define DROP_LF "has dropped the left fork"
+# define DROP_LF "has dropped th¨e left fork"
 
 //TODO To remove
 /* ---------------- DEBUG & TEST ---------------- */
 # define DEBUG	0
-# define NB		3
 
 /* ------------------ STRUCTS ------------------ */
 //add a variable to keep track of the nb of meal taken by each philo
@@ -94,32 +89,35 @@ typedef struct s_ph
 }	t_ph;
 
 /* ------------------ Parsing ------------------ */
-bool		ft_init_arg(int ac, char **av);
+bool	ft_init_arg(int ac, char **av);
 
 /* -------------------- Init ------------------- */
-void		ft_init_ms(t_ms *ms, int ac, char **av);
-void		ft_init_ph(t_ms *ms, t_ph *ph);
+void	ft_init_ms(t_ms *ms, int ac, char **av);
+void	ft_init_ph(t_ms *ms, t_ph *ph);
 
 /* ------------------ Routine ------------------ */
-void		*routine(void *arg);
-void		*routine_solo(void *arg);
+void	*routine(void *arg);
+void	*routine_solo(void *arg);
 
 /* -------------------- Utils ------------------ */
-// void		print_msg(int match, t_ph *ph);
-bool		ft_check_dead();
-bool		print_msg(int match, t_ph *ph);
-time_t		ft_timer(void);
-void		*ft_free_null(void *ptr);
-void		*ft_get_ms(void *ptr);
+bool	ft_check_dead();
+// bool	print_msg(int match, t_ph *ph);
+bool	print_msg(char *str, t_ph *ph);
+time_t	ft_timer(void);
+void	*ft_free_null(void *ptr);
+void	*ft_get_ms(void *ptr);
+bool	ft_philo(t_ms *ms, t_ph *ph);
+void	ft_destroy_mutex(t_ms *ms, t_ph *ph);
+
 
 /* -------------- Libft functions -------------- */
-long		ft_atol(const char *str);
-int			ft_atoi(const char *str);
-void		*ft_calloc(size_t count, size_t size);
-size_t		ft_strlen(const char *s);
-bool		ft_isdigit(const char *str);
-long		ft_atol(const char *str);
-void		ft_memcpy(void *src, void *dest, size_t size);
+long	ft_atol(const char *str);
+int		ft_atoi(const char *str);
+void	*ft_calloc(size_t count, size_t size);
+size_t	ft_strlen(const char *s);
+bool	ft_isdigit(const char *str);
+long	ft_atol(const char *str);
+void	ft_memcpy(void *src, void *dest, size_t size);
 
 
 //TODO To remove

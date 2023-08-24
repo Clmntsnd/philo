@@ -30,9 +30,9 @@ void	ft_init_fork(t_ph *ph, int nb)
 	i = -1;
 	while (++i < nb)
 	{
-		if (i < nb)
+		if (i != nb - 1)
 			ph[i].right = &ph[i + 1].left;
-		if (i == nb - 1)
+		else
 			ph[i].right = &ph[0].left;
 		pthread_mutex_init(&ph[i].left.f_lock, NULL);
 	}
