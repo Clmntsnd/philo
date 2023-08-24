@@ -35,21 +35,23 @@ time_t	ft_timer(void)
 bool	ft_check_dead()
 {
 	t_ms	*ms;
+	bool	dead;
 
 	ms = ft_get_ms(NULL);
 	pthread_mutex_lock(&ms->m_lock);
 	if (ms->dead == true)
-		return(pthread_mutex_unlock(&ms->m_lock), true);
-	return(pthread_mutex_unlock(&ms->m_lock), false);
+		dead = true;
+	else
+		dead = false;
+	pthread_mutex_unlock(&ms->m_lock);
+	return(dead);
 }
 
 bool	print_msg(int match, t_ph *ph)
 {
 	char 	*str;
 	bool	error;
-	t_ms	*ms;
 
-	ms = ft_get_ms(NULL);
 	if (match == THINKING)
 		str = THINK_MSG;
 	if (match == EATING)
@@ -58,22 +60,13 @@ bool	print_msg(int match, t_ph *ph)
 		str = SLEEP_MSG;
 	if (match == DEAD)
 		str = DEAD_MSG;
-	// pthread_mutex_lock(&ms->m_lock);
 	if (ft_check_dead() == false)
 	{
-		// pthread_mutex_unlock(&ms->m_lock);
-		// pthread_mutex_lock(&ph->data.msg);
 		printf("%ld %d %s\n", ft_timer(), ph->id, str);
-		// pthread_mutex_unlock(&ph->data.msg);
 		error = false;
 	}
 	else
-	{
-		// pthread_mutex_unlock(&ms->m_lock);
-		// printf("%ld %d %s\n", ft_timer(), ph->id, DEAD_MSG);
 		error = true;
-	}
-
 	//TODO add a variable to check if everyone has eaten ine this exemple : ./philo 4 410 60 800 1 
 	return (error);
 }
