@@ -1,53 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   routine.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: csenand <csenand@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/24 12:46:08 by csenand           #+#    #+#             */
+/*   Updated: 2023/08/24 12:54:15 by csenand          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/philo.h"
-
-bool	ft_fork_used(t_ph *ph)
-{
-	bool	used;
-
-	pthread_mutex_lock(&ph->left.f_lock);
-	pthread_mutex_lock(&ph->right->f_lock);
-	if (ph->left.used == false && ph->right->used == false)
-	{
-		ph->left.used = true;
-		ph->right->used = true;
-		used = true;
-	}
-	else
-		used = false;
-	pthread_mutex_unlock(&ph->right->f_lock);
-	pthread_mutex_unlock(&ph->left.f_lock);
-	return (used);
-}
-
-int	ft_monitor_th(time_t time, t_ph *ph)
-{
-	t_ms	*ms;
-	bool	dead;
-
-	ms = ft_get_ms(NULL);
-	dead = false;
-	if(time < ft_timer())
-	{
-		pthread_mutex_lock(&ms->m_lock);
-		pthread_mutex_lock(ph->print_msg);
-		if (ms->dead == false)
-		{
-			printf("%ld %d %s\n", ft_timer(), ph->id, DEAD);
-			ms->dead = true;
-			dead = true;
-		}
-		else 
-			dead = false;
-		pthread_mutex_unlock(&ms->m_lock);
-		pthread_mutex_unlock(ph->print_msg);
-	}
-	usleep(100);
-	return (dead);
-}
 
 int	ft_think(t_ph *ph)
 {
-	if(ft_check_dead() == true)
+	if (ft_check_dead() == true)
 		return (1);
 	print_msg(THINKING, ph);
 	usleep(500);
@@ -64,7 +31,7 @@ int	ft_think(t_ph *ph)
 		pthread_mutex_unlock(ph->print_msg);
 		return (0);
 	}
-	return(1);
+	return (1);
 }
 
 void	ft_drop_fork(t_ph *ph)
@@ -77,9 +44,9 @@ void	ft_drop_fork(t_ph *ph)
 
 int	ft_eat(t_ph *ph)
 {
-	time_t time_to_eat;
+	time_t	time_to_eat;
 
-	if(ft_check_dead() == true)
+	if (ft_check_dead() == true)
 	{
 		ft_drop_fork(ph);
 		return (1);
@@ -103,30 +70,29 @@ int	ft_eat(t_ph *ph)
 	return (0);
 }
 
-
 int	ft_sleep(t_ph *ph)
 {
 	time_t	time_to_sleep;
 
-	if(ft_check_dead() == true)
+	if (ft_check_dead() == true)
 		return (1);
 	time_to_sleep = ph->data.tt_s + ft_timer();
 	print_msg(SLEEPING, ph);
 	while (ft_timer() < time_to_sleep)
 		if (ft_monitor_th(ph->time_last_meal, ph) == 1)
 			return (1);
-	return(0); 
+	return (0); 
 }
 
 void	*routine(void *arg)
 {
-	t_ph *ph;
+	t_ph	*ph;
 
 	ph = (t_ph *)arg;
 	ph->time_last_meal = ph->data.tt_d;
 	if (!(ph->id & 1))
 		usleep(500);
-	while(ph->eat_i < ph->data.meal_nb)
+	while (ph->eat_i < ph->data.meal_nb)
 	{
 		if (ft_think(ph) == 1)
 			break ;

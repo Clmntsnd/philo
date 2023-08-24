@@ -6,7 +6,7 @@
 /*   By: csenand <csenand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:28:58 by csenand           #+#    #+#             */
-/*   Updated: 2023/08/24 12:35:46 by csenand          ###   ########.fr       */
+/*   Updated: 2023/08/24 12:52:56 by csenand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +110,11 @@ void	*routine_solo(void *arg);
 bool	ft_check_dead(void);
 bool	print_msg(char *str, t_ph *ph);
 time_t	ft_timer(void);
-void	*ft_free_null(void *ptr);
 void	*ft_get_ms(void *ptr);
 bool	ft_philo(t_ms *ms, t_ph *ph);
 void	ft_destroy_mutex(t_ms *ms, t_ph *ph);
+bool	ft_fork_used(t_ph *ph);
+int		ft_monitor_th(time_t time, t_ph *ph);
 
 /* -------------- Libft functions -------------- */
 long	ft_atol(const char *str);
