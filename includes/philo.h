@@ -6,7 +6,7 @@
 /*   By: csenand <csenand@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:28:58 by csenand           #+#    #+#             */
-/*   Updated: 2023/08/24 12:29:07 by csenand          ###   ########.fr       */
+/*   Updated: 2023/08/24 12:35:46 by csenand          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,23 +60,18 @@
 # define DROP_RF "has dropped the right fork"
 # define DROP_LF "has dropped th¨e left fork"
 
-//TODO To remove
-/* ---------------- DEBUG & TEST ---------------- */
-# define DEBUG	0
-
 /* ------------------ STRUCTS ------------------ */
-//add a variable to keep track of the nb of meal taken by each philo
 
 typedef struct s_ms
 {
-	int				philo_nb;	//number_of_philosophers
-	int				tt_d;		//time_to_die
-	int				tt_e;		//time_to_eat
-	int				tt_s;		//time_to_sleep
-	int				meal_nb;	//number_of_times_each_philosopher_must_eat
-	time_t			start_time;	
+	int				philo_nb;
+	int				tt_d;
+	int				tt_e;		
+	int				tt_s;	
+	int				meal_nb;
+	time_t			start_time;
 	bool			dead;
-	pthread_mutex_t	m_lock;		
+	pthread_mutex_t	m_lock;
 	pthread_mutex_t	msg;
 	pthread_mutex_t	f_lock;
 }	t_ms;
@@ -90,7 +85,7 @@ typedef struct s_fork
 typedef struct s_ph
 {
 	int					id;
-	int					eat_i;	//eat counter for each philo
+	int					eat_i;
 	t_fork				left;
 	t_fork				*right;
 	t_ms				data;
@@ -112,15 +107,13 @@ void	*routine(void *arg);
 void	*routine_solo(void *arg);
 
 /* -------------------- Utils ------------------ */
-bool	ft_check_dead();
-// bool	print_msg(int match, t_ph *ph);
+bool	ft_check_dead(void);
 bool	print_msg(char *str, t_ph *ph);
 time_t	ft_timer(void);
 void	*ft_free_null(void *ptr);
 void	*ft_get_ms(void *ptr);
 bool	ft_philo(t_ms *ms, t_ph *ph);
 void	ft_destroy_mutex(t_ms *ms, t_ph *ph);
-
 
 /* -------------- Libft functions -------------- */
 long	ft_atol(const char *str);
@@ -130,9 +123,5 @@ size_t	ft_strlen(const char *s);
 bool	ft_isdigit(const char *str);
 long	ft_atol(const char *str);
 void	ft_memcpy(void *src, void *dest, size_t size);
-
-
-//TODO To remove
-void	print_debug(int ac, t_ms *ms, t_ph *ph);
 
 #endif
