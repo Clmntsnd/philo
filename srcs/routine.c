@@ -21,9 +21,11 @@ bool	ft_fork_used(t_ph *ph)
 
 int	ft_monitor_th(time_t time, t_ph *ph)
 {
-	t_ms *ms;
+	t_ms	*ms;
+	bool	dead;
 
 	ms = ft_get_ms(NULL);
+	dead = false;
 	if(time < ft_timer())
 	{
 		pthread_mutex_lock(&ms->m_lock);
@@ -32,13 +34,15 @@ int	ft_monitor_th(time_t time, t_ph *ph)
 		{
 			printf("%ld %d %s\n", ft_timer(), ph->id, DEAD);
 			ms->dead = true;
-			pthread_mutex_unlock(ph->print_msg);
-			pthread_mutex_unlock(&ms->m_lock);
-			return (1);
+			dead = true;
 		}
+		else 
+			dead = false;
+		pthread_mutex_unlock(&ms->m_lock);
+		pthread_mutex_unlock(ph->print_msg);
 	}
 	usleep(100);
-	return (0);
+	return (dead);
 }
 
 int	ft_think(t_ph *ph)
@@ -50,16 +54,17 @@ int	ft_think(t_ph *ph)
 	while (ft_fork_used(ph) == false)
 		if (ft_monitor_th(ph->time_last_meal, ph) == 1)
 			return (1);
-	pthread_mutex_lock(&ph->left.f_lock);
-	pthread_mutex_lock(&ph->right->f_lock);
 	if (ft_check_dead() == false)
 	{
+		pthread_mutex_lock(&ph->left.f_lock);
+		pthread_mutex_lock(&ph->right->f_lock);
 		pthread_mutex_lock(ph->print_msg);
 		printf("%ld %d %s\n", ft_timer(), ph->id, PICK_LF);
 		printf("%ld %d %s\n", ft_timer(), ph->id, PICK_RF);
 		pthread_mutex_unlock(ph->print_msg);
+		return (0);
 	}
-	return(false);
+	return(1);
 }
 
 void	ft_drop_fork(t_ph *ph)
@@ -75,15 +80,21 @@ int	ft_eat(t_ph *ph)
 	time_t time_to_eat;
 
 	if(ft_check_dead() == true)
+	{
+		ft_drop_fork(ph);
 		return (1);
+	}
 	time_to_eat = ph->data.tt_e + ft_timer();
 	if (print_msg(EATING, ph) == true)
+	{
+		ft_drop_fork(ph);
 		return (1);
+	}
 	while (ft_timer() < time_to_eat)
 	{
 		if (ft_monitor_th(ph->time_last_meal, ph) == 1)
 		{
-			puts("from eat");
+			ft_drop_fork(ph);
 			return (1);
 		}
 	}
@@ -120,14 +131,12 @@ void	*routine(void *arg)
 		if (ft_think(ph) == 1)
 			break ;
 		if (ft_eat(ph) == 1)
-		{
-			//TODO remove
-			puts("BREAK EAT");
 			break ;
-		}
 		ph->eat_i++;
 		if (ft_sleep(ph) == 1)
 			break ;
 	}
+	pthread_mutex_unlock(&ph->right->f_lock);
+	pthread_mutex_unlock(&ph->left.f_lock);
 	return (arg);
 }
