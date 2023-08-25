@@ -6,7 +6,7 @@
 /*   By: loulou <loulou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:46:08 by csenand           #+#    #+#             */
-/*   Updated: 2023/08/25 10:57:39 by loulou           ###   ########.fr       */
+/*   Updated: 2023/08/25 12:05:51 by loulou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ int	ft_think(t_ph *ph)
 			return (1);
 	if (ft_check_dead() == false)
 	{
-		pthread_mutex_lock(&ph->left.f_lock);
-		pthread_mutex_lock(&ph->right->f_lock);
 		pthread_mutex_lock(ph->print_msg);
 		printf("%ld %d %s\n", ft_timer(), ph->id, PICK_LF);
 		printf("%ld %d %s\n", ft_timer(), ph->id, PICK_RF);
@@ -36,6 +34,8 @@ int	ft_think(t_ph *ph)
 
 void	ft_drop_fork(t_ph *ph)
 {
+	pthread_mutex_lock(&ph->left.f_lock);
+	pthread_mutex_lock(&ph->right->f_lock);
 	ph->left.used = false;
 	ph->right->used = false;
 	pthread_mutex_unlock(&ph->right->f_lock);
@@ -102,12 +102,6 @@ void	*routine(void *arg)
 		if (ft_sleep(ph) == 1)
 			break ;
 	}
-	//This was the fix (add mutexes and reset used variable to false)
-	pthread_mutex_lock(&ph->right->f_lock);
-	pthread_mutex_lock(&ph->left.f_lock);
-	ph->left.used = false;
-	ph->right->used = false;
-	pthread_mutex_unlock(&ph->right->f_lock);
-	pthread_mutex_unlock(&ph->left.f_lock);
+	ft_drop_fork(ph);
 	return (arg);
 }
