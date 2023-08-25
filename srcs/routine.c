@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csenand <csenand@student.42.fr>            +#+  +:+       +#+        */
+/*   By: loulou <loulou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:46:08 by csenand           #+#    #+#             */
-/*   Updated: 2023/08/24 12:54:15 by csenand          ###   ########.fr       */
+/*   Updated: 2023/08/25 10:57:39 by loulou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,11 @@ void	*routine(void *arg)
 		if (ft_sleep(ph) == 1)
 			break ;
 	}
+	//This was the fix (add mutexes and reset used variable to false)
+	pthread_mutex_lock(&ph->right->f_lock);
+	pthread_mutex_lock(&ph->left.f_lock);
+	ph->left.used = false;
+	ph->right->used = false;
 	pthread_mutex_unlock(&ph->right->f_lock);
 	pthread_mutex_unlock(&ph->left.f_lock);
 	return (arg);
