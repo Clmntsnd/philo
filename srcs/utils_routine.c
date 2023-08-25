@@ -6,7 +6,7 @@
 /*   By: loulou <loulou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:51:16 by csenand           #+#    #+#             */
-/*   Updated: 2023/08/25 10:53:52 by loulou           ###   ########.fr       */
+/*   Updated: 2023/08/25 12:19:05 by loulou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	ft_monitor_th(time_t time, t_ph *ph)
 			ms->dead = true;
 			dead = true;
 		}
-		else 
+		else
 			dead = false;
 		pthread_mutex_unlock(&ms->m_lock);
 		pthread_mutex_unlock(ph->print_msg);

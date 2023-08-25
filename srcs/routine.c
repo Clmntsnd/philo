@@ -6,7 +6,7 @@
 /*   By: loulou <loulou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:46:08 by csenand           #+#    #+#             */
-/*   Updated: 2023/08/25 12:05:51 by loulou           ###   ########.fr       */
+/*   Updated: 2023/08/25 12:18:55 by loulou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	ft_sleep(t_ph *ph)
 	while (ft_timer() < time_to_sleep)
 		if (ft_monitor_th(ph->time_last_meal, ph) == 1)
 			return (1);
-	return (0); 
+	return (0);
 }
 
 void	*routine(void *arg)
