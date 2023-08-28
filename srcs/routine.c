@@ -6,11 +6,21 @@
 /*   By: loulou <loulou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:46:08 by csenand           #+#    #+#             */
-/*   Updated: 2023/08/25 12:18:55 by loulou           ###   ########.fr       */
+/*   Updated: 2023/08/25 12:30:20 by loulou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
+void	ft_drop_fork(t_ph *ph)
+{
+	pthread_mutex_lock(&ph->left.f_lock);
+	pthread_mutex_lock(&ph->right->f_lock);
+	ph->left.used = false;
+	ph->right->used = false;
+	pthread_mutex_unlock(&ph->right->f_lock);
+	pthread_mutex_unlock(&ph->left.f_lock);
+}
 
 int	ft_think(t_ph *ph)
 {
@@ -19,8 +29,13 @@ int	ft_think(t_ph *ph)
 	print_msg(THINKING, ph);
 	usleep(500);
 	while (ft_fork_used(ph) == false)
+	{	
 		if (ft_monitor_th(ph->time_last_meal, ph) == 1)
+		{
+			ft_drop_fork(ph);
 			return (1);
+		}
+	}
 	if (ft_check_dead() == false)
 	{
 		pthread_mutex_lock(ph->print_msg);
@@ -32,15 +47,6 @@ int	ft_think(t_ph *ph)
 	return (1);
 }
 
-void	ft_drop_fork(t_ph *ph)
-{
-	pthread_mutex_lock(&ph->left.f_lock);
-	pthread_mutex_lock(&ph->right->f_lock);
-	ph->left.used = false;
-	ph->right->used = false;
-	pthread_mutex_unlock(&ph->right->f_lock);
-	pthread_mutex_unlock(&ph->left.f_lock);
-}
 
 int	ft_eat(t_ph *ph)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: csenand <csenand@student.42.fr>            +#+  +:+       +#+        */
+/*   By: loulou <loulou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 12:39:04 by csenand           #+#    #+#             */
-/*   Updated: 2023/08/24 12:54:33 by csenand          ###   ########.fr       */
+/*   Updated: 2023/08/25 12:33:35 by loulou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,9 @@ bool	print_msg(char *str, t_ph *ph)
 
 	if (ft_check_dead() == false)
 	{
+		pthread_mutex_lock(ph->print_msg);
 		printf("%ld %d %s\n", ft_timer(), ph->id, str);
+		pthread_mutex_unlock(ph->print_msg);
 		error = false;
 	}
 	else
